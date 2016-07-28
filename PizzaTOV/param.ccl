@@ -1,0 +1,128 @@
+# Parameter definitions for thorn PizzaTOV
+# $Header:$
+
+
+shares: IO
+USES CCTK_STRING out_dir
+
+shares: ADMBase
+EXTENDS keyword initial_data
+{
+  "PizzaTOV" :: "Nonrotating TOV star"
+}
+
+EXTENDS keyword initial_lapse
+{
+  "PizzaTOV" :: "Nonrotating TOV star"
+}
+
+EXTENDS keyword initial_shift
+{
+  "PizzaTOV" :: "Nonrotating TOV star"
+}
+
+shares: HydroBase
+
+EXTENDS keyword initial_hydro
+{
+  "PizzaTOV" :: "Nonrotating TOV star"
+}
+
+EXTENDS keyword initial_temperature
+{
+  "PizzaTOV" :: "Nonrotating TOV star"
+}
+
+EXTENDS keyword initial_Y_e
+{
+  "PizzaTOV" :: "Nonrotating TOV star"
+}
+
+#shares:PizzaIDBase
+
+
+private:
+
+KEYWORD idtype "Number of NS to create"
+{
+    "TOV" :: "Single neutron star"
+    "BNS" :: "Two neutron stars (constraint violating!)"
+} "TOV"
+
+CCTK_REAL star_gm1_cut "Artificial surface criterion"
+{
+  0:* :: ""
+} 0
+
+##############################################################################
+# Parameters used only for the single neutron star case
+##############################################################################
+CCTK_REAL star_crmd "Central rest mass density"
+{
+  0:* :: ""
+} 7.9056e17
+
+CCTK_INT pert_l "Perturbation with Y_lm"
+{
+  0:10 :: ""
+} 0
+
+CCTK_INT pert_m "Perturbation with Y_lm"
+{
+  0:10 :: ""
+} 0
+
+CCTK_INT pert_n "Perturbation with nth overtone"
+{
+  0:10 :: ""
+} 1
+
+CCTK_REAL pert_amp "Perturbation amplitude"
+{
+  -0.9:0.9 :: ""
+} 0.000
+
+CCTK_REAL kick_amp "Radial kick amplitude"
+{
+  *:* :: ""
+} 0.000
+##############################################################################
+
+##############################################################################
+# Parameters used only for the double neutron star case
+##############################################################################
+CCTK_REAL star_rhoc[2] "Central density of each star"
+{
+  (0:* :: "Any positive number"
+} 7.9056e17
+
+CCTK_REAL star_posx[2] "x-position of each star"
+{
+  * :: "Any real number"
+} 0.0
+
+CCTK_REAL star_posy[2] "y-position of each star"
+{
+  * :: "Any real number"
+} 0.0
+
+CCTK_REAL star_posz[2] "z-position of each star"
+{
+  * :: "Any real number"
+} 0.0
+
+CCTK_REAL star_velx[2] "x-velocity of each star"
+{
+  (-1:1) :: "Any reasonable value"
+} 0.0
+
+CCTK_REAL star_vely[2] "y-velocity of each star"
+{
+  (-1:1) :: "Any reasonable value"
+} 0.0
+
+CCTK_REAL star_velz[2] "z-velocity of each star"
+{
+  (-1:1) :: "Any reasonable value"
+} 0.0
+##############################################################################

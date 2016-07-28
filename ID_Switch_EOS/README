@@ -1,0 +1,11 @@
+
+Cactus Code Thorn ID_Switch_EOS
+Thorn Author(s)     : Wolfgang Kastaun <physik@fangwolg.de>
+Thorn Maintainer(s) : Wolfgang Kastaun <physik@fangwolg.de>
+--------------------------------------------------------------------------
+
+Purpose of the thorn:
+
+Recompute pressure of initial data from the EOS used in evolution.
+Optionally, recompute temperature from specific energy or the other way around.
+

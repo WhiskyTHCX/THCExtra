@@ -1,0 +1,12 @@
+# Schedule definitions for thorn EOS_Thermal_Hybrid
+# $Header:$
+
+if (CCTK_Equals(evol_eos_name, "Hybrid"))
+{
+  schedule EOS_Hybrid_Register at Startup
+  {
+    LANG: C
+  } "Register Hybrid EOS as global evolution EOS"
+}
+
+

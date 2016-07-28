@@ -1,0 +1,8 @@
+# Main make.code.defn file for thorn PizzaBase
+# $Header:$
+
+# Source files in this directory
+SRCS = central.cc adapt.cc pizza_base.cc mesh.cc 
+
+# Subdirectories containing source files
+SUBDIRS = 

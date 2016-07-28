@@ -1,0 +1,80 @@
+# Schedule definitions for thorn BNSAnalysis
+# $Header:$
+
+if(set_mach_number)
+{
+  STORAGE: mach_number
+}
+
+if(set_vorticity)
+{
+  STORAGE: vorticity
+}
+
+if (set_u_t)
+{
+  STORAGE: u_t
+}
+
+if (set_s_phi)
+{
+  STORAGE: s_phi
+}
+
+if (set_cons_entropy)
+{
+  STORAGE: cons_entropy
+}
+
+if (set_dens_noatmo)
+{
+  STORAGE: dens_noatmo
+}
+
+if (set_dens_unbnd)
+{
+  STORAGE: dens_unbnd
+  STORAGE: dens_unbnd_bernoulli
+  STORAGE: dens_unbnd_garching
+}
+
+if (set_entropy_unbnd)
+{
+  STORAGE: entropy_unbnd
+}
+
+if (set_ye_unbnd)
+{
+  STORAGE: ye_unbnd
+}
+
+schedule BNSAnalysis_Startup at STARTUP
+{
+  LANG: C
+} "Parameter Conversions"
+
+
+schedule BNSAnalysis_Compute at ANALYSIS
+{
+  LANG: C
+} "Compute quantities for BNS analysis"
+
+
+if(set_mach_number)
+{
+  SCHEDULE BNSAnalysis_MachNumber AT CCTK_ANALYSIS
+  {
+    LANG: C
+    TRIGGER: mach_number
+  } "Compute the Mach number"
+}
+
+if(set_vorticity)
+{
+  SCHEDULE BNSAnalysis_Vorticity AT CCTK_ANALYSIS
+  {
+    LANG: C
+    TRIGGER: vorticity
+    STORAGE: specific_momentum
+  } "Compute the vorticity"
+}

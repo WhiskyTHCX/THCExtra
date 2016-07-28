@@ -1,0 +1,11 @@
+# Parameter definitions for thorn EOS_Thermal
+# $Header:$
+
+restricted:
+
+KEYWORD evol_eos_name "Name of active EOS for evolution"
+{
+  "none" :: "No EOS available"
+} "none"
+
+

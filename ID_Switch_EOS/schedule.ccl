@@ -1,0 +1,16 @@
+# Schedule definitions for thorn ID_Switch_EOS
+# $Header:$
+
+
+schedule ID_Switch_EOS_Startup at STARTUP after PizzaIDBase_Startup
+{
+  LANG: C
+} "Parameter Conversions"
+
+
+schedule ID_Switch_EOS_Adapt in HydroBase_Initial after PizzaIDBase_Perturb
+{
+  LANG: C
+} "Make hydro state compatible with EOS from EOS_Thermal"
+
+

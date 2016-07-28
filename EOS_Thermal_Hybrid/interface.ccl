@@ -1,0 +1,11 @@
+# Interface definition for thorn EOS_Thermal_Hybrid
+# $Header:$
+
+implements: EOS_Thermal_Hybrid
+
+inherits: EOS_Thermal PizzaNumUtils EOS_Barotropic
+
+USES INCLUDE : eos_thermal.h global_eos_thermal.h pizza_eos_barotropic.h pizza_eos_barotropic_file.h pizza_unitconv.h
+
+
+

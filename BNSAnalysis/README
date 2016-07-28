@@ -1,0 +1,15 @@
+Cactus Code Thorn THC_Analysis
+Author(s)    : Wolfgang Kastaun <physik@fangwolg.de>
+               David Radice <david.radice@aei.mpg.de>
+Maintainer(s): David Radice <david.radice@aei.mpg.de>
+Licence      : GPLv3
+--------------------------------------------------------------------------
+
+1. Purpose
+
+Analysis routines for the Templated Hydrodynamics Code.
+
+2. History
+
+This thorn includes routines from the old THC_Analysis thorn developed by David
+Radice and routines from the BNSAnalysis thorn developed by Wolfgang Kastaun.

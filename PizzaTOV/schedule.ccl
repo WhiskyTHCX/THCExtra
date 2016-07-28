@@ -1,0 +1,32 @@
+# Schedule definitions for thorn PizzaTOV
+# $Header:$
+
+schedule PizzaTOV_Startup at STARTUP after PizzaIDBase_Startup
+{
+  LANG: C
+} "Parameter Conversions"
+
+if (CCTK_Equals(initial_data,"PizzaTOV"))
+{
+  if (CCTK_Equals(idtype, "TOV"))
+  {
+    schedule PizzaTOV_Initial_Data in PizzaIDBase_InitialData
+    {
+      LANG: C
+    } "TOV-Star initial data"
+
+    schedule PizzaTOV_Perturb_Data in PizzaIDBase_Perturb
+    {
+      LANG: C
+    } "Add Density Perturbation to initial data"
+  }
+
+  if (CCTK_Equals(idtype, "BNS"))
+  {
+    schedule PizzaTOV_BNS_InitialData in PizzaIDBase_InitialData
+    {
+      LANG: C
+    } "Crappy BNS initial data"
+  }
+}
+

@@ -1,0 +1,9 @@
+Cactus Code Thorn Composition
+Author(s)    : David Radice <dradice@caltech.edu>
+Maintainer(s): David Radice <dradice@caltech.edu>
+Licence      : GPLv3
+--------------------------------------------------------------------------
+
+1. Purpose
+
+Compute the detailed composition of the fluid (currently only Abar)

@@ -1,0 +1,12 @@
+# Interface definition for thorn EOS_Barotropic
+# $Header:$
+
+implements: EOS_Barotropic
+
+INCLUDES HEADER : eos_barotropic.h in pizza_eos_barotropic.h
+INCLUDES HEADER : eos_barotropic_file.h in pizza_eos_barotropic_file.h
+
+inherits: PizzaNumUtils
+
+USES INCLUDE : pizza_lookuptab.h pizza_unitconv.h pizza_intervals.h
+

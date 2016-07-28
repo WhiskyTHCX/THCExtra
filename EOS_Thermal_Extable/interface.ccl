@@ -1,0 +1,12 @@
+# Interface definition for thorn EOS_Thermal_Extable
+# $Header:$
+
+implements: EOS_Thermal_Extable
+
+inherits: EOS_Thermal EOS_Thermal_Table3d
+
+USES INCLUDE : eos_thermal.h global_eos_thermal.h
+USES INCLUDE : eos_table3d.h the_eos_table3d.h
+
+
+

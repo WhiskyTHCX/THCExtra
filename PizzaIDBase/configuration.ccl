@@ -1,0 +1,10 @@
+# Configuration definition for thorn PizzaIDBase
+# $Header:$
+
+REQUIRES EOS_Barotropic PizzaNumUtils PizzaBase
+PROVIDES PizzaIDBase
+{
+  SCRIPT
+  LANG
+}
+

@@ -1,0 +1,9 @@
+# Configuration definitions for thorn PizzaNumUtils
+
+REQUIRES GSL Boost
+
+PROVIDES PizzaNumUtils
+{
+  SCRIPT
+  LANG
+}

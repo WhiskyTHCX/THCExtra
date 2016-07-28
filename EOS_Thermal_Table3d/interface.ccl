@@ -1,0 +1,12 @@
+# Interface definition for thorn EOS_Thermal_Table3D
+# $Header:$
+
+implements: EOS_Thermal_Table3d
+
+INCLUDES HEADER : eos_table3d.h in eos_table3d.h
+INCLUDES HEADER : register.h in the_eos_table3d.h
+
+inherits: EOS_Thermal
+
+USES INCLUDE : eos_thermal.h global_eos_thermal.h
+

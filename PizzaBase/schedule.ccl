@@ -1,0 +1,7 @@
+# Schedule definitions for thorn PizzaBase
+# $Header:$
+
+ schedule PizzaBase_Startup at STARTUP
+  {
+    LANG: C
+  } "Parameter Conversions"

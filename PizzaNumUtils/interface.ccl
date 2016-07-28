@@ -1,0 +1,17 @@
+# Interface definition for thorn PizzaNumUtils
+# $Header:$
+
+implements: PizzaNumUtils
+
+INCLUDES HEADER : smatrix.h in pizza_smatrix.h
+INCLUDES HEADER : spharmonics.h in pizza_spharmonics.h
+INCLUDES HEADER : splines.h in pizza_splines.h
+INCLUDES HEADER : functors.h in pizza_functors.h
+INCLUDES HEADER : lookuptab.h in pizza_lookuptab.h
+INCLUDES HEADER : roots.h in pizza_roots.h
+INCLUDES HEADER : odes.h in pizza_odes.h
+INCLUDES HEADER : polynomial.h in pizza_polynomial.h
+INCLUDES HEADER : unitconv.h in pizza_unitconv.h
+INCLUDES HEADER : intervals.h in pizza_intervals.h
+
+

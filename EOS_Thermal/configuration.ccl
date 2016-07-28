@@ -1,0 +1,7 @@
+REQUIRES Boost
+PROVIDES EOS_Thermal
+{
+  SCRIPT
+  LANG
+}
+

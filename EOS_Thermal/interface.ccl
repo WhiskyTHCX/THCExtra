@@ -1,0 +1,63 @@
+# Interface definition for thorn EOS_Thermal
+# $Header:$
+
+implements: EOS_Thermal
+
+INCLUDES HEADER : eos_thermal.h in eos_thermal.h
+INCLUDES HEADER : global_eos.h in global_eos_thermal.h
+USES INCLUDE : global_eos.h eos_thermal.h
+
+
+CCTK_INT FUNCTION EOS_Press_Derivs_From_Rho_Eps_Ye(CCTK_REAL IN rho, CCTK_REAL IN eps, CCTK_REAL IN ye,\
+        CCTK_REAL OUT press, CCTK_REAL OUT dpdrho, CCTK_REAL OUT dpdeps, CCTK_INT IN warn)
+PROVIDES FUNCTION EOS_Press_Derivs_From_Rho_Eps_Ye WITH Wrapper_Press_Derivs_From_Rho_Eps_Ye LANGUAGE C
+
+CCTK_INT FUNCTION EOS_Press_Csnd2_From_Rho_Eps_Ye(CCTK_REAL IN rho, CCTK_REAL IN eps, CCTK_REAL IN ye,\
+        CCTK_REAL OUT press, CCTK_REAL OUT csnd2, CCTK_INT IN warn)
+PROVIDES FUNCTION EOS_Press_Csnd2_From_Rho_Eps_Ye WITH Wrapper_Press_Csnd2_From_Rho_Eps_Ye LANGUAGE C
+
+CCTK_INT FUNCTION EOS_Csnd2_From_Rho_Eps_Ye(CCTK_REAL IN rho, CCTK_REAL IN eps, CCTK_REAL IN ye,\
+        CCTK_REAL OUT cs2, CCTK_INT IN warn)
+PROVIDES FUNCTION EOS_Csnd2_From_Rho_Eps_Ye WITH Wrapper_Csnd2_From_Rho_Eps_Ye LANGUAGE C
+
+
+CCTK_INT FUNCTION EOS_Temp_From_Rho_Eps_Ye(CCTK_REAL IN rho, CCTK_REAL IN eps, CCTK_REAL IN ye,\
+        CCTK_REAL OUT temp, CCTK_INT IN warn)
+PROVIDES FUNCTION EOS_Temp_From_Rho_Eps_Ye WITH Wrapper_Temp_From_Rho_Eps_Ye LANGUAGE C
+
+CCTK_INT FUNCTION EOS_Press_From_Rho_Eps_Ye(CCTK_REAL IN rho, CCTK_REAL IN eps, CCTK_REAL IN ye,\
+        CCTK_REAL OUT press, CCTK_INT IN warn)
+PROVIDES FUNCTION EOS_Press_From_Rho_Eps_Ye WITH Wrapper_Press_From_Rho_Eps_Ye LANGUAGE C
+
+CCTK_INT FUNCTION EOS_Entropy_From_Rho_Eps_Ye(CCTK_REAL IN rho, CCTK_REAL IN eps, CCTK_REAL IN ye,\
+        CCTK_REAL OUT entropy, CCTK_INT IN warn)
+PROVIDES FUNCTION EOS_Entropy_From_Rho_Eps_Ye WITH Wrapper_Entropy_From_Rho_Eps_Ye LANGUAGE C
+
+CCTK_INT FUNCTION EOS_Entropy_From_Rho_Temp_Ye(CCTK_REAL IN rho, CCTK_REAL IN temp, CCTK_REAL IN ye,\
+        CCTK_REAL OUT entropy, CCTK_INT IN warn)
+PROVIDES FUNCTION EOS_Entropy_From_Rho_Temp_Ye WITH Wrapper_Entropy_From_Rho_Temp_Ye LANGUAGE C
+
+void FUNCTION EOS_Warning(CCTK_REAL IN XIerr,   \
+				CCTK_REAL IN YIerr, CCTK_REAL IN ZIerr,   \
+				CCTK_INT IN RefLevelIerr)
+
+PROVIDES FUNCTION EOS_Warning WITH Wrapper_EOS_Warning LANGUAGE C
+
+CCTK_INT FUNCTION EosValidateRhoEpsYe(CCTK_REAL IN rho, CCTK_REAL IN eps, CCTK_REAL IN ye)
+PROVIDES FUNCTION EosValidateRhoEpsYe WITH EosValidateRhoEpsYe_wrapper LANGUAGE C
+
+CCTK_INT FUNCTION EosValidateRhoYe(CCTK_REAL IN rho, CCTK_REAL IN ye)
+PROVIDES FUNCTION EosValidateRhoYe WITH EosValidateRhoYe_wrapper LANGUAGE C
+
+void FUNCTION EosRangeEps(CCTK_REAL IN rho, CCTK_REAL IN ye, CCTK_REAL OUT epsmin, CCTK_REAL OUT epsmax)
+PROVIDES FUNCTION EosRangeEps WITH EosRangeEps_wrapper LANGUAGE C
+
+
+# DEPRECATED interface, will just abort when called
+#
+CCTK_INT FUNCTION equationOfState(                \
+        CCTK_REAL ARRAY IN independentVariables, \
+        CCTK_REAL ARRAY OUT dependentVariables,   \
+        CCTK_INT IN optionsFlag)
+
+PROVIDES FUNCTION equationOfState WITH equationOfState_wrapper LANGUAGE C

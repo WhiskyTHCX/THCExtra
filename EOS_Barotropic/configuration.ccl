@@ -1,0 +1,10 @@
+# Configuration definitions for thorn EOS_Barotropic
+
+REQUIRES Boost PizzaNumUtils
+
+PROVIDES EOS_Barotropic
+{
+  SCRIPT
+  LANG
+}
+

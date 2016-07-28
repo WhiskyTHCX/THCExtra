@@ -1,0 +1,7 @@
+# Schedule definitions for thorn WeakRates
+
+
+schedule StartTableReader AT CCTK_STARTUP
+{
+ LANG: FORTRAN
+} "Read the 3D table"

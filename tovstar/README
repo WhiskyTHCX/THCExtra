@@ -1,0 +1,38 @@
+The programs tovsol and tovsols are used to compute TOV solutions or solutions
+sequences, for arbitrary barotropic equations of state (EOS). For isentropic
+EOSs, tovsol can also be used to compute oscillation frequencies and 
+eigenfunctions in the Cowling approximation (fixed spacetime).
+The code is based on a library tovlib. For the latter, python bindings are
+available as well for interactive work or scripts.
+
+Requirements
+
+-cmake (make replacement)
+-BOOST libraries
+-GSL library
+-SWIG (optional, needed for Python bindings)
+-Doxygen (optional, needed to build documentation)
+-Python with modules numpy and matplotlib (optional, 
+ for plotting of star sequences)
+
+Installation
+
+To compile and install to a custom location <install dir>, 
+cd to the source directory and execute
+
+cd build 
+cmake -DCMAKE_INSTALL_PREFIX:PATH=<install dir> ..
+make
+make install 
+
+If the boost library is in a nonstandard location, specify
+the -DBOOST_ROOT= argument to cmake.
+ 
+Further documentation
+
+The main documentation of tovstar(s) can be found after 
+the installation under 
+<install dir>/share/doc/tovstar/html/index.html,
+and the documentation of the library tovlib under
+<install dir>/share/doc/tovlib/html/index.html
+

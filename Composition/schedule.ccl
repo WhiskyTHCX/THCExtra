@@ -1,0 +1,10 @@
+# Schedule definitions for thorn Composition
+
+if(CCTK_Equals(Abar_evolution_method, "Composition")) {
+
+SCHEDULE Comp_Abar IN HydroBase_PostStep AFTER HydroBase_Con2Prim
+{
+    LANG: C
+} "Compute Abar from rho, eps and Y_e"
+
+}

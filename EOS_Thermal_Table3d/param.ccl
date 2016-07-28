@@ -1,0 +1,31 @@
+# Parameter definitions for thorn EOS_Thermal_Table3D
+# $Header:$
+
+shares: EOS_Thermal
+
+EXTENDS KEYWORD evol_eos_name
+{
+  "Tabulated3d" :: "EOS Tabulated in (rho, T, Ye)"
+}
+
+restricted:
+
+# EOS table will be read from <eos_db_loc>/<eos_folder>/<eos_filename>
+# One can set eos_db_loc = $ENV{HOME} to create parfiles independent
+# of the cluster.
+#
+CCTK_STRING eos_db_loc "Base path for EOSs"
+{
+  ".+" :: "Pathname"
+} "."
+
+CCTK_STRING eos_folder "Path to EOS folder"
+{
+  ".+" :: "Pathname relative to eos_db_loc"
+} "."
+
+CCTK_STRING eos_filename "Filename containing EOS table"
+{
+  ".+" :: "Filename"
+} "eos_table.h5"
+

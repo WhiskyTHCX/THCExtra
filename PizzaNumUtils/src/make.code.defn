@@ -1,0 +1,8 @@
+# Main make.code.defn file for thorn PizzaNumUtils
+# $Header:$
+
+# Source files in this directory
+SRCS = functors.cpp lookuptab.cpp spharmonics.cpp splines.cpp unitconv.cpp minima.cpp roots.cpp polynomial.cpp odes.cpp
+
+# Subdirectories containing source files
+SUBDIRS = 

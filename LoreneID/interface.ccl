@@ -1,0 +1,20 @@
+# Interface definition for thorn LoreneID
+# $Header:$
+
+implements: LoreneID
+inherits: grid PizzaBase PizzaIDBase HydroBase ADMBase
+
+USES INCLUDE : pizza_central.h pizza_idbase.h pizzacactus.h pizza_unitconv.h
+
+CCTK_REAL coords_ulorene type = GF Timelevels = 1 tags='Prolongation="None" checkpoint="no"'
+{
+  x_ulorene, y_ulorene, z_ulorene
+} "coordinates in LORENE units"
+
+CCTK_REAL bns_parameters TYPE=SCALAR
+{
+  lorene_bns_omega
+  lorene_bns_separation
+} "Lorene BNS solution parameters"
+
+

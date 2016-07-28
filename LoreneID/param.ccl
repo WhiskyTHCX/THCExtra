@@ -1,0 +1,91 @@
+# Parameter definitions for thorn  LoreneID
+# $Header:$
+
+
+shares: IO
+USES CCTK_STRING out_dir
+
+shares: ADMBase
+EXTENDS keyword initial_data
+{
+  "LoreneBNS" :: "BNS Initial data in LORENE format"
+}
+
+EXTENDS keyword initial_lapse
+{
+  "LoreneBNS" :: "BNS Initial data in LORENE format"
+}
+
+EXTENDS keyword initial_shift
+{
+  "LoreneBNS" :: "BNS Initial data in LORENE format"
+}
+
+shares: HydroBase
+
+EXTENDS keyword initial_hydro
+{
+  "LoreneBNS" :: "BNS Initial data in LORENE format"
+}
+
+EXTENDS keyword initial_temperature
+{
+  "LoreneBNS" :: "BNS Initial data in LORENE format"
+}
+
+EXTENDS keyword initial_Y_e
+{
+  "LoreneBNS" :: "BNS Initial data in LORENE format"
+}
+
+#shares:PizzaIDBase
+
+
+private:
+
+CCTK_STRING lorene_bns_file "File containing LORENE initial data"
+{
+  ".+" :: "Pathname"
+} "inif.d"
+
+BOOLEAN link_dummy_eos "Work around LORENE EOS file quirk."
+{
+} "no"
+
+#Temporary hack to deal with different definitions of rest mass density.
+#The rest mass density set on the CACTUS grid will be the one in LORENE (converted
+#to CACTUS units) divided by this factor
+CCTK_REAL mass_conversion "atomic mass unit LORENE / mass unit evolution EOS"
+{
+  0:* :: "Not zero"
+} 1.0
+
+BOOLEAN modify_id "Whether to modifiy initial data to make eccentric orbit and/or spin up stars"
+{
+} "no"
+
+BOOLEAN old_behaviour "Old behaviour: just scale 3-velocity"
+{
+} "no"
+
+CCTK_REAL rho_cut "Discards all points below this density"
+{
+  0:* :: "Any non-negative value"
+} 0.0
+
+CCTK_REAL scale_vel "Multiply orbital velocity by this factor to make eccentric orbit."
+{
+  0:* :: "Values other than 1 make your spacetime unphysical.."
+} 1.0
+
+CCTK_REAL scale_above_density "Modify velocity only above this density."
+{
+  0:* :: "Should be greater 0."
+} 1e-9
+
+CCTK_REAL spinup_fac "Multiply star spin velocity by this factor"
+{
+  *:* :: "Values other than 1 make your spacetime unphysical.."
+} 1.0
+
+

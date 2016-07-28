@@ -1,0 +1,8 @@
+# Main make.code.defn file for thorn EOS_Thermal_Table3D
+# $Header:$
+
+# Source files in this directory
+SRCS = eos3Dmod.F90 hdfOpenField.F90 interpolations.F90 findtemp.F90 TableReaderAEI.F90 tabulated3d.F90 eps_range.F90 eos_table3d.cc register.cc
+
+# Subdirectories containing source files
+SUBDIRS = 

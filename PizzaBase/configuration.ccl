@@ -1,0 +1,10 @@
+# Configuration definitions for thorn PizzaBase
+
+REQUIRES MPI
+REQUIRES PizzaNumUtils
+PROVIDES PizzaBase
+{
+  SCRIPT
+  LANG
+}
+

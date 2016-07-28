@@ -1,0 +1,5 @@
+name      = BU (Polytropic)
+type      = polytrope
+poly_n    = 1
+poly_rmd  = 6.176e+18
+

@@ -1,0 +1,7 @@
+# Parameter definitions for thorn Composition
+
+SHARES: HydroBase
+EXTENDS KEYWORD Abar_evolution_method "Evolution method for Abar"
+{
+    "Composition" :: "Use Composition to compute Abar after the ConsToAll"
+}

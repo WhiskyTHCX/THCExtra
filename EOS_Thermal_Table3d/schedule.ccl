@@ -1,0 +1,11 @@
+# Schedule definitions for thorn EOS_Thermal_Table3D
+# $Header:$
+
+if (CCTK_Equals(evol_eos_name, "Tabulated3d"))
+{
+  schedule EOS_Table3D_Register at STARTUP
+  {
+    LANG: C
+  } "Register tabulated EOS as global evolution EOS"
+}
+

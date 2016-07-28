@@ -1,0 +1,8 @@
+# Main make.code.defn file for thorn PizzaTOV
+# $Header:$
+
+# Source files in this directory
+SRCS = pizza_tov.cc tov.cc tovsol.cpp modes.cpp frobenius.cpp sturm.cpp simple_bns.cc
+
+# Subdirectories containing source files
+SUBDIRS = 

@@ -1,0 +1,6 @@
+name      = EOS_Test_PP
+type      = pwpoly
+poly_rmd  = 6.176e+18
+max_rmd   = 1e100
+0.0         2.0
+1e17        2.0

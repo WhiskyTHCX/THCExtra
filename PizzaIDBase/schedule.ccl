@@ -1,0 +1,66 @@
+# Schedule definitions for thorn PizzaIDBase
+# $Header:$
+
+schedule PizzaIDBase_Startup at STARTUP after PizzaBase_Startup
+{
+  LANG: C
+} "Parameter Conversions"
+
+SCHEDULE GROUP PizzaIDBase_InitialData
+{
+} "Construct initial data"
+
+#SCHEDULE GROUP PizzaIDBase_DependentVars
+#{
+#} "Compute additional variables that depend on initial data"
+
+SCHEDULE GROUP PizzaIDBase_Analysis_Unpert
+{
+} "Analysis of unperturbed data"
+
+SCHEDULE GROUP PizzaIDBase_Perturb
+{
+} "Perturb initial data"
+
+schedule group PizzaIDBase_InitialData in HydroBase_Initial
+{
+} "Construct initial data"
+
+#schedule Group PizzaIDBase_DependentVars in HydroBase_Initial after PizzaIDBase_InitialData before #PizzaIDBase_Analysis_Unpert
+#{
+#} "Compute ID-dependent variables for unperturbed data"
+
+
+schedule group PizzaIDBase_Analysis_Unpert in HydroBase_Initial after PizzaIDBase_InitialData
+{
+} "Analysis of unperturbed data"
+
+
+schedule group PizzaIDBase_Perturb in HydroBase_Initial after PizzaIDBase_Analysis_Unpert
+{
+} "Add Perturbation to initial data"
+
+#schedule Group PizzaIDBase_DependentVars in HydroBase_Initial after PizzaIDBase_Perturb before #PizzaIDBase_Timelevels
+#{
+#} "Compute ID-dependent variables for perturbed data"
+
+schedule PizzaIDBase_Timelevels in HydroBase_Initial after PizzaIDBase_Perturb
+{
+  LANG: C
+} "Copy ID to previous timelevels"
+
+if (save_unpert_id) {
+  schedule PizzaIDBase_Save_Unpert in PizzaIDBase_Analysis_Unpert
+  {
+    LANG: C
+    OPTIONS: level
+  } "Save unperturbed initial data"
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+# Interface definition for thorn PizzaTOV
+# $Header:$
+
+implements: PizzaTOV
+inherits: grid PizzaBase PizzaIDBase PizzaNumUtils HydroBase ADMBase
+
+USES INCLUDE : pizzacactus.h pizza_idbase.h  pizza_unitconv.h pizza_eos_barotropic.h
+USES INCLUDE : pizza_spharmonics.h pizza_functors.h pizza_splines.h
+USES INCLUDE : pizza_roots.h pizza_odes.h pizza_polynomial.h
+
+

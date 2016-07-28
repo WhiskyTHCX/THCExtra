@@ -1,0 +1,12 @@
+/*! \mainpage Barotropic EOS interface
+This code provides a generic object oriented C++-interface representing a
+relativistic barotropic equation of state (EOS), as well as
+implementations of polytropic and tabulated EOSs. The framework makes it
+easy to implement custom EOSs. For the standard implementations, a
+function is provided to read an EOS from unified file format without
+knowing the type of EOS.
+
+The generic interface is defined by the class 
+\ref EOS_Barotropic::eos_1p. To implement a new EOS, one has to provide
+the interface EOS_Barotropic::eos_1p_api.
+*/

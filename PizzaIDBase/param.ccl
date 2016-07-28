@@ -1,0 +1,14 @@
+# Parameter definitions for thorn PizzaIDBase
+# $Header:$
+
+restricted:
+
+CCTK_STRING eos_file "File containing initial data EOS" STEERABLE=RECOVER
+{
+  ".+" :: "Pathname"
+} "eos_id.dat"
+
+BOOLEAN save_unpert_id "Save unperturbed density profile"
+{
+} "no"
+

@@ -1,0 +1,6 @@
+# Configuration definition for thorn LoreneID
+# $Header:$
+
+REQUIRES PizzaBase PizzaIDBase
+REQUIRES LORENE GSL BOOST
+

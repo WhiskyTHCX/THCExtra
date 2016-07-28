@@ -1,0 +1,8 @@
+# Main make.code.defn file for thorn EOS_Barotropic
+# $Header:$
+
+# Source files in this directory
+SRCS = eos_barotropic.cpp eos_polytropic.cpp eos_tabulated.cpp eos_barotropic_file.cpp eos_piecewise_poly.cpp
+
+# Subdirectories containing source files
+SUBDIRS = 

@@ -1,0 +1,5 @@
+# Configuration definition for thorn PizzaTOV
+# $Header:$
+
+REQUIRES GSL Boost PizzaNumUtils EOS_Barotropic PizzaBase PizzaIDBase
+

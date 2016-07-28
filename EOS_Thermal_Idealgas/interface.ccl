@@ -1,0 +1,11 @@
+# Interface definition for thorn EOS_Thermal_Idealgas
+# $Header:$
+
+implements: EOS_Thermal_Idealgas
+
+inherits: EOS_Thermal
+
+USES INCLUDE : eos_thermal.h global_eos_thermal.h
+
+
+

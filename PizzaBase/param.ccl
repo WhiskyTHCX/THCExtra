@@ -1,0 +1,41 @@
+# Parameter definitions for thorn PizzaBase
+# $Header:$
+
+CCTK_REAL length_unit "Geometric units used by Pizza specified by length unit"
+{
+  0:* :: ""
+} 1.0
+
+KEYWORD coord_type "Coordinate type"
+{
+  "spherical" :: "Spherical coordinates (r,phi,theta)"
+  "cylindrical" :: "Cylindrical coordinates (d,phi,z)"
+  "cartesian" :: "Cartesian coordinates (x,y,z)"
+} "cartesian"
+
+KEYWORD coord_sym0 "Coordinate symmetry along dimension 0"
+{
+  "flat" :: "Translation symmetry"
+  "half" :: "Mirror symmetry"
+  "full" :: "No symmetry"
+} "full"
+
+KEYWORD coord_sym1 "Coordinate symmetry along dimension 1"
+{
+  "flat" :: "Translation symmetry"
+  "half" :: "Mirror symmetry"
+  "full" :: "No symmetry"
+} "full"
+
+KEYWORD coord_sym2 "Coordinate symmetry along dimension 2"
+{
+  "flat" :: "Translation symmetry"
+  "half" :: "Mirror symmetry"
+  "full" :: "No symmetry"
+} "full"
+
+CCTK_STRING eos_file "File containing EOS"
+{
+  "" :: "Pathname"
+} ""
+

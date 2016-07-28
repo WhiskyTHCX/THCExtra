@@ -1,0 +1,4 @@
+eos         = EOS_BU
+min_rmd_c   = 2e16
+max_rmd_c   = 8e19 
+nsteps      = 200

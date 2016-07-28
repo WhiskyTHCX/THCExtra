@@ -1,0 +1,10 @@
+# Interface definition for thorn Composition
+IMPLEMENTS: Composition
+INHERITS: HydroBase
+
+CCTK_INT FUNCTION NucleiAbar( \
+        CCTK_REAL IN rho,\
+        CCTK_REAL IN temp,\
+        CCTK_REAL IN ye,\
+        CCTK_REAL OUT abar)
+USES FUNCTION NucleiAbar

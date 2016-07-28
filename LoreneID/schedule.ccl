@@ -1,0 +1,26 @@
+# Schedule definitions for thorn LoreneID
+# $Header:$
+
+STORAGE: bns_parameters
+
+schedule LoreneID_Startup at STARTUP after PizzaIDBase_Startup
+{
+  LANG: C
+} "Parameter Conversions"
+
+if (CCTK_Equals(initial_data,"LoreneBNS"))
+{
+
+  schedule LoreneID_LoadMeudon in PizzaIDBase_InitialData
+  {
+    LANG: C
+    STORAGE: coords_ulorene[1]
+  } "Load initial data in LORENE format"
+
+  schedule LoreneID_Add_Missing in PizzaIDBase_InitialData after LoreneID_LoadMeudon
+  {
+    LANG: C
+  } "Recompute quantities not saved by LORENE"
+
+}
+

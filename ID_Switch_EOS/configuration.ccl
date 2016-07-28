@@ -1,0 +1,7 @@
+# Configuration definition for thorn ID_Switch_EOS
+# $Header:$
+
+REQUIRES EOS_Thermal PizzaBase PizzaIDBase
+
+
+

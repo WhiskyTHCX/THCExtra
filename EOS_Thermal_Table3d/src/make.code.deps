@@ -1,0 +1,9 @@
+#module dependencies. Manually declared.
+TableReaderAEI.F90.o:         eos3Dmod.F90.o
+TableReaderAEI.F90.o:         hdfOpenField.F90.o
+interpolations.F90.o:         eos3Dmod.F90.o
+findtemp.F90.o:               eos3Dmod.F90.o
+findtemp.F90.o:               interpolations.F90.o
+tabulated3d.F90.o:            eos3Dmod.F90.o
+tabulated3d.F90.o:            interpolations.F90.o
+EOSSetParam.F90.o:            eos3Dmod.F90.o

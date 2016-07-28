@@ -1,0 +1,12 @@
+# Schedule definitions for thorn EOS_Thermal_Idealgas
+# $Header:$
+
+if (CCTK_Equals(evol_eos_name, "Extable"))
+{
+  schedule EOS_Extable_Register at Startup
+  {
+    LANG: C
+  } "Register Extended Table EOS as global evolution EOS"
+}
+
+

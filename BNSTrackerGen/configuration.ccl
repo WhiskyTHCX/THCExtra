@@ -1,0 +1,10 @@
+# Configuration definition for thorn BNSTrackerGen
+# $Header:$
+
+REQUIRES PizzaBase
+
+PROVIDES BNSTrackerGen
+{
+  SCRIPT
+  LANG
+}

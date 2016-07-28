@@ -1,0 +1,8 @@
+# Interface definition for thorn ID_Switch_EOS
+# $Header:$
+
+implements: ID_Switch_EOS
+inherits: grid PizzaBase PizzaIDBase HydroBase ADMBase
+
+USES INCLUDE : pizza_central.h pizza_idbase.h pizzacactus.h pizza_unitconv.h eos_thermal.h
+

@@ -1,0 +1,44 @@
+# Interface definition for thorn BNSAnalysis
+# $Header:$
+
+IMPLEMENTS:     BNSAnalysis
+INHERITS:       ADMBase, Grid, HydroBase, PizzaBase, THC_Core
+
+USES INCLUDE: finite_difference.h
+USES INCLUDE: utils_macro.h
+USES INCLUDE: pizza_central.h
+USES INCLUDE: pizza_unitconv.h
+USES INCLUDE: pizzacactus.h
+
+PUBLIC:
+
+CCTK_REAL mach_number TYPE=GF TAGS='Prolongation="None"' "Mach number"
+
+CCTK_REAL vorticity TYPE=GF TAGS='Prolongation="None"'
+{
+    vorticity_xy
+    vorticity_xz
+    vorticity_yz
+} "Vorticity tensor"
+
+CCTK_REAL u_t TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "4-velocity component u_t"
+
+CCTK_REAL s_phi TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "Angular momentum density"
+
+CCTK_REAL cons_entropy TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "conserved entropy density"
+
+CCTK_REAL dens_noatmo TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "conserved matter density excluding artificial atmo"
+
+CCTK_REAL dens_unbnd TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "unbound matter density (geodesic crit.)"
+
+CCTK_REAL dens_unbnd_bernoulli TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "unbound matter density (Bernoulli crit.)"
+
+CCTK_REAL dens_unbnd_garching TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "unbound matter density (garching crit.)"
+
+CCTK_REAL entropy_unbnd TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "unbound matter entropy density"
+
+CCTK_REAL ye_unbnd TYPE=GF TIMELEVELS=1 TAGS='Prolongation="None"' "unbound matter ye density"
+
+PRIVATE:
+
+CCTK_REAL specific_momentum[3] TYPE=GF  TAGS='Prolongation="None" CheckPoint="no"' "Specific momentum"

@@ -1,0 +1,6 @@
+# Configuration definition for thorn BNSAnalysis
+# $Header:$
+
+REQUIRES PizzaBase
+
+

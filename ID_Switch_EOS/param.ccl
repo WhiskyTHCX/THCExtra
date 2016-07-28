@@ -1,0 +1,31 @@
+# Parameter definitions for thorn ID_Switch_EOS
+# $Header:$
+
+
+shares: IO
+USES CCTK_STRING out_dir
+
+shares: HydroBase
+
+EXTENDS KEYWORD initial_entropy
+{
+  "IDSwitchEOS" :: "Use IDSwitchEOS to compute entropy from thermal EOS."
+}
+
+
+private:
+
+
+BOOLEAN sync_eps_temp "Make sure specific energy and temperature agree."
+{
+} "no"
+
+BOOLEAN temp_from_eps "Use ID eps to compute T instead of the opposite."
+{
+} "no"
+
+BOOLEAN limit_efrac "Limit out of range electron fraction instead of aborting."
+{
+} "no"
+
+

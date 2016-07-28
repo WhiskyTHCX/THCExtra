@@ -1,0 +1,50 @@
+# Parameter definitions for thorn BNSAnalysis
+# $Header:$
+
+SHARES: THC_Core
+USES CCTK_REAL atmo_rho
+USES CCTK_REAL atmo_tolerance
+USES INT fd_order
+USES BOOLEAN verbose
+
+PRIVATE:
+
+BOOLEAN set_eninf "Compute the specific energy at infinity"
+{
+} "no"
+
+BOOLEAN set_mach_number "Compute the Mach number"
+{
+} "no"
+
+BOOLEAN set_vorticity "Compute the vorticity"
+{
+} "no"
+
+BOOLEAN set_u_t "Set GF u_t"
+{
+} "no"
+
+BOOLEAN set_s_phi "Set GF s_phi"
+{
+} "no"
+
+BOOLEAN set_cons_entropy "Set GF cons_entropy"
+{
+} "no"
+
+BOOLEAN set_dens_noatmo "Set GF dens_noatmo"
+{
+} "no"
+
+BOOLEAN set_dens_unbnd "Set GF dens_unbnd"
+{
+} "no"
+
+BOOLEAN set_entropy_unbnd "Set GF entropy_unbnd"
+{
+} "no"
+
+BOOLEAN set_ye_unbnd "Set GF ye_unbnd"
+{
+} "no"
