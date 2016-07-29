@@ -1,9 +1,12 @@
 CVS info   : $Header:$
 
 Cactus Code Thorn PizzaTOV
-Thorn Author(s)     : Wolfgang Kastaun <kastaun@tat.physik.uni-tuebingen.de>
-Thorn Maintainer(s) : Wolfgang Kastaun <kastaun@tat.physik.uni-tuebingen.de>
+Thorn Author(s)     : Wolfgang Kastaun <physik@fangwolg.de>
+                      David Radice <dradice@caltech.edu>
+Thorn Maintainer(s) : Wolfgang Kastaun <physik@fangwolg.de>
+                      David Radice <dradice@caltech.edu>
 --------------------------------------------------------------------------
 
 Purpose of the thorn:
 
+Creates non-rotating neutron star initial data

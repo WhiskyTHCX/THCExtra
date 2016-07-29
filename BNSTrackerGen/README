@@ -1,9 +1,8 @@
-CVS info   : $Header:$
-
 Cactus Code Thorn BNSTrackerGen
-Thorn Author(s)     : Wolfgang Kastaun <kastaun@tat.physik.uni-tuebingen.de>
-Thorn Maintainer(s) : Wolfgang Kastaun <kastaun@tat.physik.uni-tuebingen.de>
+Thorn Author(s)     : Wolfgang Kastaun <physik@fangwolg.de>
+Thorn Maintainer(s) : Wolfgang Kastaun <physik@fangwolg.de>
 --------------------------------------------------------------------------
 
 Purpose of the thorn:
 
+Steers Carpet's AMR to track the two NSs

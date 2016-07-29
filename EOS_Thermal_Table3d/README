@@ -2,8 +2,10 @@ CVS info   : $Header:$
 
 Cactus Code Thorn EOS_Thermal_Table3D
 Thorn Author(s)     : Wolfgang Kastaun <physik@fangwolg.de>
+                      Filippo Galeazzi <galeazzi@th.physik.uni-frankfurt.de>
 Thorn Maintainer(s) : Wolfgang Kastaun <physik@fangwolg.de>
 --------------------------------------------------------------------------
 
 Purpose of the thorn:
 
+Handles 3D tabulated EOSs

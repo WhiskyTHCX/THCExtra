@@ -7,3 +7,4 @@ Thorn Maintainer(s) : Wolfgang Kastaun <physik@fangwolg.de>
 
 Purpose of the thorn:
 
+Basic API for density, temperature, and composition dependent EOS
