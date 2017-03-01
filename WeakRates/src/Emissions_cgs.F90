@@ -4,7 +4,7 @@
 
 INTEGER FUNCTION Emissions_cgs(rho, temp, ye,&
                              R_nue, R_nua, R_nux, Q_nue, Q_nua, Q_nux)
-    use Inf_NaN_Detection
+    use ieee_arithmetic
     use table3d_mod
     use lk_interpolations
     use weak_constants
@@ -172,32 +172,32 @@ INTEGER FUNCTION Emissions_cgs(rho, temp, ye,&
     Q_nua = Qbeta_nua + Qpair_nua + Qplasm_nua !+ Qbrem
     Q_nux = Qpair_nux + Qplasm_nux !+ 4.0d0 * Qbrem
 
-    if (isnan(R_nue).or.isinf(R_nue)) then
+    if (.not.ieee_is_finite(R_nue)) then
        write(*,*) "Emissions_cgs: NaN/Inf in R_nue", rho, temp, ye
        Emissions_cgs = -1
     endif
 
-    if (isnan(R_nua).or.isinf(R_nua)) then
+    if (.not.ieee_is_finite(R_nua)) then
        write(*,*) "Emissions_cgs: NaN/Inf in R_nua", rho, temp, ye
        Emissions_cgs = -1
     endif
 
-    if (isnan(R_nux).or.isinf(R_nux)) then
+    if (.not.ieee_is_finite(R_nux)) then
        write(*,*) "Emissions_cgs: NaN/Inf in R_nux", rho, temp, ye
        Emissions_cgs = -1
     endif
 
-    if (isnan(Q_nue).or.isinf(Q_nue)) then
+    if (.not.ieee_is_finite(Q_nue)) then
        write(*,*) "Emissions_cgs: NaN/Inf in Q_nue", rho, temp, ye
        Emissions_cgs = -1
     endif
 
-    if (isnan(Q_nua).or.isinf(Q_nua)) then
+    if (.not.ieee_is_finite(Q_nua)) then
        write(*,*) "Emissions_cgs: NaN/Inf in Q_nua", rho, temp, ye
        Emissions_cgs = -1
     endif
 
-    if (isnan(Q_nux).or.isinf(Q_nux)) then
+    if (.not.ieee_is_finite(Q_nux)) then
        write(*,*) "Emissions_cgs: NaN/Inf in Q_nux", rho, temp, ye
        Emissions_cgs = -1
     endif

@@ -18,7 +18,7 @@ INTEGER FUNCTION Opacities_cgs(rho, temp, ye, &
     !             kappa_1_nux heavy nu opct. for energy tranport.
     !----------------------------------------------------------------------
 
-    use Inf_NaN_Detection
+    use ieee_arithmetic
     use table3d_mod
     use weak_constants
 
@@ -73,32 +73,32 @@ INTEGER FUNCTION Opacities_cgs(rho, temp, ye, &
        Opacities_cgs = -1
     endif
 
-    if (isnan(kappa_0_nue_abs).or.isinf(kappa_0_nue_abs)) then
+    if (.not.ieee_is_finite(kappa_0_nue_abs)) then
        write(*,*) "Opacities_cgs: NaN/Inf in kappa_0_nue_abs"
        Opacities_cgs = -1
     endif
 
-    if (isnan(kappa_0_nua_abs).or.isinf(kappa_0_nua_abs)) then
+    if (.not.ieee_is_finite(kappa_0_nua_abs)) then
        write(*,*) "Opacities_cgs: NaN/Inf in kappa_0_nua_abs"
        Opacities_cgs = -1
     endif
 
-    if (isnan(kappa_0_nux_abs).or.isinf(kappa_0_nux_abs)) then
+    if (.not.ieee_is_finite(kappa_0_nux_abs)) then
        write(*,*) "Opacities_cgs: NaN/Inf in kappa_0_nux_abs"
        Opacities_cgs = -1
     endif
 
-    if (isnan(kappa_0_nue_sct).or.isinf(kappa_0_nue_sct)) then
+    if (.not.ieee_is_finite(kappa_0_nue_sct)) then
        write(*,*) "Opacities_cgs: NaN/Inf in kappa_0_nue_sct"
        Opacities_cgs = -1
     endif
 
-    if (isnan(kappa_0_nua_sct).or.isinf(kappa_0_nua_sct)) then
+    if (.not.ieee_is_finite(kappa_0_nua_sct)) then
        write(*,*) "Opacities_cgs: NaN/Inf in kappa_0_nua_sct"
        Opacities_cgs = -1
     endif
 
-    if (isnan(kappa_0_nux_sct).or.isinf(kappa_0_nux_sct)) then
+    if (.not.ieee_is_finite(kappa_0_nux_sct)) then
        write(*,*) "Opacities_cgs: NaN/Inf in kappa_0_nux_sct"
        Opacities_cgs = -1
     endif
@@ -118,7 +118,7 @@ INTEGER FUNCTION Absorption_cgs(rho, temp, ye,&
                                  kappa_0_nue, kappa_0_nua, kappa_0_nux, &
                                  kappa_1_nue, kappa_1_nua, kappa_1_nux)
 
-    use Inf_NaN_Detection
+    use ieee_arithmetic
     use table3d_mod
     use weak_constants
     use lk_interpolations
@@ -192,32 +192,32 @@ INTEGER FUNCTION Absorption_cgs(rho, temp, ye,&
     kappa_1_nux = zeta_nux *&
                         (temp * mev_to_erg)**2 * FERMI5O3(eta_nux)
 
-    if (isnan(kappa_0_nue).or.isinf(kappa_0_nue)) then
+    if (.not.ieee_is_finite(kappa_0_nue)) then
        write(*,*) "Absorption_cgs: NaN/Inf in kappa_0_nue", rho, temp, ye
        Absorption_cgs = -1
     endif
 
-    if (isnan(kappa_0_nua).or.isinf(kappa_0_nua)) then
+    if (.not.ieee_is_finite(kappa_0_nua)) then
        write(*,*) "Absorption_cgs: NaN/Inf in kappa_0_nua", rho, temp, ye
        Absorption_cgs = -1
     endif
 
-    if (isnan(kappa_0_nux).or.isinf(kappa_0_nux)) then
+    if (.not.ieee_is_finite(kappa_0_nux)) then
        write(*,*) "Absorption_cgs: NaN/Inf in kappa_0_nux", rho, temp, ye
        Absorption_cgs = -1
     endif
 
-    if (isnan(kappa_1_nue).or.isinf(kappa_1_nue)) then
+    if (.not.ieee_is_finite(kappa_1_nue)) then
        write(*,*) "Absorption_cgs: NaN/Inf in kappa_1_nue", rho, temp, ye
        Absorption_cgs = -1
     endif
 
-    if (isnan(kappa_1_nua).or.isinf(kappa_1_nua)) then
+    if (.not.ieee_is_finite(kappa_1_nua)) then
        write(*,*) "Absorption_cgs: NaN/Inf in kappa_1_nua", rho, temp, ye
        Absorption_cgs = -1
     endif
 
-    if (isnan(kappa_1_nux).or.isinf(kappa_1_nux)) then
+    if (.not.ieee_is_finite(kappa_1_nux)) then
        write(*,*) "Absorption_cgs: NaN/Inf in kappa_1_nux", rho, temp, ye
        Absorption_cgs = -1
     endif
@@ -230,7 +230,7 @@ INTEGER FUNCTION Scattering_cgs(rho, temp, ye,&
                                  kappa_0_nue, kappa_0_nua, kappa_0_nux, &
                                  kappa_1_nue, kappa_1_nua, kappa_1_nux)
 
-    use Inf_NaN_Detection
+    use ieee_arithmetic
     use table3d_mod
     use weak_constants
     use lk_interpolations
@@ -322,32 +322,32 @@ INTEGER FUNCTION Scattering_cgs(rho, temp, ye,&
     kappa_1_nux = zeta_nux *&
                         (temp * mev_to_erg)**2 * FERMI5O3(eta_nux)
 
-    if (isnan(kappa_0_nue).or.isinf(kappa_0_nue)) then
+    if (.not.ieee_is_finite(kappa_0_nue)) then
        write(*,*) "Scattering_cgs: NaN/Inf in kappa_0_nue", rho, temp, ye
        Scattering_cgs = -1
     endif
 
-    if (isnan(kappa_0_nua).or.isinf(kappa_0_nua)) then
+    if (.not.ieee_is_finite(kappa_0_nua)) then
        write(*,*) "Scattering_cgs: NaN/Inf in kappa_0_nua", rho, temp, ye
        Scattering_cgs = -1
     endif
 
-    if (isnan(kappa_0_nux).or.isinf(kappa_0_nux)) then
+    if (.not.ieee_is_finite(kappa_0_nux)) then
        write(*,*) "Scattering_cgs: NaN/Inf in kappa_0_nux", rho, temp, ye
        Scattering_cgs = -1
     endif
 
-    if (isnan(kappa_1_nue).or.isinf(kappa_1_nue)) then
+    if (.not.ieee_is_finite(kappa_1_nue)) then
        write(*,*) "Scattering_cgs: NaN/Inf in kappa_1_nue", rho, temp, ye
        Scattering_cgs = -1
     endif
 
-    if (isnan(kappa_1_nua).or.isinf(kappa_1_nua)) then
+    if (.not.ieee_is_finite(kappa_1_nua)) then
        write(*,*) "Scattering_cgs: NaN/Inf in kappa_1_nua", rho, temp, ye
        Scattering_cgs = -1
     endif
 
-    if (isnan(kappa_1_nux).or.isinf(kappa_1_nux)) then
+    if (.not.ieee_is_finite(kappa_1_nux)) then
        write(*,*) "Scattering_cgs: NaN/Inf in kappa_1_nux", rho, temp, ye
        Scattering_cgs = -1
     endif

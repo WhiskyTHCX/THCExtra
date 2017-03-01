@@ -6,7 +6,7 @@
 INTEGER FUNCTION NeutrinoDens_cgs(rho, temp, ye,&
                                    n_nue, n_nua, n_nux, en_nue, en_nua, en_nux)
 
-    use Inf_NaN_Detection
+    use ieee_arithmetic
     use table3d_mod
     use lk_interpolations
     use weak_constants
@@ -45,32 +45,32 @@ INTEGER FUNCTION NeutrinoDens_cgs(rho, temp, ye,&
     en_nua = 4.0d0 * pi / hc_mevcm**3 * temp**4 * FERMI3(eta_nua)
     en_nux = 16.0d0 * pi / hc_mevcm**3 * temp**4 * FERMI3(eta_nux)
 
-    if (isnan(n_nue).or.isinf(n_nue)) then
+    if (.not.ieee_is_finite(n_nue)) then
        write(*,*) "NeutrinoDens_cgs: NaN/Inf in n_nue", rho, temp, ye
        NeutrinoDens_cgs= -1
     endif
 
-    if (isnan(n_nua).or.isinf(n_nua)) then
+    if (.not.ieee_is_finite(n_nua)) then
        write(*,*) "NeutrinoDens_cgs: NaN/Inf in n_nua", rho, temp, ye
        NeutrinoDens_cgs= -1
     endif
 
-    if (isnan(n_nux).or.isinf(n_nux)) then
+    if (.not.ieee_is_finite(n_nux)) then
        write(*,*) "NeutrinoDens_cgs: NaN/Inf in n_nux", rho, temp, ye
        NeutrinoDens_cgs= -1
     endif
 
-    if (isnan(en_nue).or.isinf(en_nue)) then
+    if (.not.ieee_is_finite(en_nue)) then
        write(*,*) "NeutrinoDens_cgs: NaN/Inf in en_nue", rho, temp, ye
        NeutrinoDens_cgs= -1
     endif
 
-    if (isnan(en_nua).or.isinf(en_nua)) then
+    if (.not.ieee_is_finite(en_nua)) then
        write(*,*) "NeutrinoDens_cgs: NaN/Inf in en_nua", rho, temp, ye
        NeutrinoDens_cgs= -1
     endif
 
-    if (isnan(en_nux).or.isinf(en_nux)) then
+    if (.not.ieee_is_finite(en_nux)) then
        write(*,*) "NeutrinoDens_cgs: NaN/Inf in en_nux", rho, temp, ye
        NeutrinoDens_cgs= -1
     endif

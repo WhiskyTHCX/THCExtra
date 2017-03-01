@@ -7,7 +7,6 @@ CCTK_INT FUNCTION NeutrinoEmissionImpl(rho, temp, ye, &
                                    emissionRatesRloc_nue, emissionRatesRloc_nua, &
                                    emissionRatesRloc_nux, emissionRatesQloc_nue, &
                                    emissionRatesQloc_nua,emissionRatesQloc_nux)
-    use Inf_NaN_Detection
     use table3d_mod
     use weak_constants
 
@@ -80,7 +79,6 @@ CCTK_INT FUNCTION NeutrinoOpacityImpl(rho, temp, ye, &
                                       kappa_0_nue, kappa_0_nua, kappa_0_nux, &
                                       kappa_1_nue, kappa_1_nua, kappa_1_nux)
 
-    use Inf_NaN_Detection
     use table3d_mod
     use weak_constants
     implicit none
@@ -143,7 +141,6 @@ CCTK_INT FUNCTION NeutrinoAbsorptionRateImpl(rho, temp, ye,&
                               kappa_1_nue, kappa_1_nua, kappa_1_nux)
 
 
-    use Inf_NaN_Detection
     use table3d_mod
     use weak_constants
     IMPLICIT NONE
