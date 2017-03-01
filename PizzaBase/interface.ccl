@@ -9,8 +9,8 @@ inherits: PizzaNumUtils
 USES INCLUDE : pizza_smatrix.h pizza_unitconv.h
 
 
-INCLUDES HEADER : adapt.h in pizzacactus.h
-INCLUDES HEADER : central.h in pizza_central.h
+INCLUDES HEADER: adapt.h in pizzacactus.h
+INCLUDES HEADER: central.h in pizza_central.h
 
 
 CCTK_INT FUNCTION GetBoundarySpecification (CCTK_INT IN size, CCTK_INT OUT ARRAY nboundaryzones, \

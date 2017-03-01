@@ -3,8 +3,8 @@
 
 implements: EOS_Thermal_Table3d
 
-INCLUDES HEADER : eos_table3d.h in eos_table3d.h
-INCLUDES HEADER : register.h in the_eos_table3d.h
+INCLUDES HEADER: eos_table3d.h in eos_table3d.h
+INCLUDES HEADER: register.h in the_eos_table3d.h
 
 inherits: EOS_Thermal
 

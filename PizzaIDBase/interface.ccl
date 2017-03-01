@@ -8,6 +8,6 @@ inherits: grid HydroBase ADMBase PizzaBase PizzaNumUtils EOS_Barotropic
 USES INCLUDE : pizza_central.h pizzacactus.h pizza_unitconv.h
 USES INCLUDE : pizza_eos_barotropic.h pizza_eos_barotropic_file.h
 
-INCLUDES HEADER : idbase.h in pizza_idbase.h
+INCLUDES HEADER: idbase.h in pizza_idbase.h
 
 

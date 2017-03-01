@@ -13,7 +13,7 @@ CCTK_INT FUNCTION NeutrinoEmission( \
         CCTK_REAL OUT q_nue,\
         CCTK_REAL OUT q_nua,\
         CCTK_REAL OUT q_nux)
-PROVIDES FUNCTION NeutrinoEmission WITH NeutrinoEmissionImpl LANGUAGE FORTRAN
+PROVIDES FUNCTION NeutrinoEmission WITH NeutrinoEmissionImpl LANGUAGE Fortran
 
 CCTK_INT FUNCTION NeutrinoOpacity( \
         CCTK_REAL IN rho,\
@@ -25,7 +25,7 @@ CCTK_INT FUNCTION NeutrinoOpacity( \
         CCTK_REAL OUT kappa_1_nue,\
         CCTK_REAL OUT kappa_1_nua,\
         CCTK_REAL OUT kappa_1_nux)
-PROVIDES FUNCTION NeutrinoOpacity WITH NeutrinoOpacityImpl LANGUAGE FORTRAN
+PROVIDES FUNCTION NeutrinoOpacity WITH NeutrinoOpacityImpl LANGUAGE Fortran
 
 CCTK_INT FUNCTION NeutrinoAbsorptionRate( \
         CCTK_REAL IN rho,\
@@ -37,7 +37,7 @@ CCTK_INT FUNCTION NeutrinoAbsorptionRate( \
         CCTK_REAL OUT abs_1_nue,\
         CCTK_REAL OUT abs_1_nua,\
         CCTK_REAL OUT abs_1_nux)
-PROVIDES FUNCTION NeutrinoAbsorptionRate WITH NeutrinoAbsorptionRateImpl LANGUAGE FORTRAN
+PROVIDES FUNCTION NeutrinoAbsorptionRate WITH NeutrinoAbsorptionRateImpl LANGUAGE Fortran
 
 # Normalized neutrino density and average energy
 CCTK_INT FUNCTION NeutrinoDensity( \
@@ -50,15 +50,15 @@ CCTK_INT FUNCTION NeutrinoDensity( \
         CCTK_REAL OUT ene_nue, \
         CCTK_REAL OUT ene_nua, \
         CCTK_REAL OUT ene_nux)
-PROVIDES FUNCTION NeutrinoDensity WITH NeutrinoDensityImpl LANGUAGE FORTRAN
+PROVIDES FUNCTION NeutrinoDensity WITH NeutrinoDensityImpl LANGUAGE Fortran
 
 CCTK_INT FUNCTION NucleiAbar( \
         CCTK_REAL IN rho,\
         CCTK_REAL IN temp,\
         CCTK_REAL IN ye,\
         CCTK_REAL OUT abar)
-PROVIDES FUNCTION NucleiAbar WITH NucleiAbarImpl LANGUAGE FORTRAN
+PROVIDES FUNCTION NucleiAbar WITH NucleiAbarImpl LANGUAGE Fortran
 
 # Normalized average baryon mass
 CCTK_REAL FUNCTION AverageBaryonMass()
-PROVIDES FUNCTION AverageBaryonMass WITH AtomicMassImpl LANGUAGE FORTRAN
+PROVIDES FUNCTION AverageBaryonMass WITH AtomicMassImpl LANGUAGE Fortran

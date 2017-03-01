@@ -3,8 +3,8 @@
 
 implements: EOS_Thermal
 
-INCLUDES HEADER : eos_thermal.h in eos_thermal.h
-INCLUDES HEADER : global_eos.h in global_eos_thermal.h
+INCLUDES HEADER: eos_thermal.h in eos_thermal.h
+INCLUDES HEADER: global_eos.h in global_eos_thermal.h
 USES INCLUDE : global_eos.h eos_thermal.h
 
 

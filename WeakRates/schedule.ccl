@@ -3,5 +3,5 @@
 
 schedule StartTableReader AT CCTK_STARTUP
 {
- LANG: FORTRAN
+ LANG: Fortran
 } "Read the 3D table"
