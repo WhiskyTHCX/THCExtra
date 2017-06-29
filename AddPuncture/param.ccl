@@ -1,0 +1,50 @@
+# Parameter definitions for thorn AddPuncture
+
+SHARES: THC_Core
+USES BOOLEAN verbose
+
+PRIVATE:
+
+CCTK_REAL puncture_eps "Fudge for the conformal factor"
+{
+    (0:* :: "Any number larger than 0"
+} 1.0e-15
+
+CCTK_REAL puncture_mass "Mass of the puncture to add"
+{
+    0:* :: "Any non-negative mass"
+} 0.0
+
+CCTK_REAL puncture_pos_x "x-position of the puncture"
+{
+    * :: "Any real number"
+} 0.0
+
+CCTK_REAL puncture_pos_y "y-position of the puncture"
+{
+    * :: "Any real number"
+} 0.0
+
+CCTK_REAL puncture_pos_z "z-position of the puncture"
+{
+    * :: "Any real number"
+} 0.0
+
+CCTK_REAL puncture_vel_x "Puncture velocity in the x-direction"
+{
+    (-1:1) :: "Velocities that make sense"
+} 0.0
+
+CCTK_REAL puncture_vel_y "Puncture velocity in the y-direction"
+{
+    (-1:1) :: "Velocities that make sense"
+} 0.0
+
+CCTK_REAL puncture_vel_z "Puncture velocity in the z-direction"
+{
+    (-1:1) :: "Velocities that make sense"
+} 0.0
+
+BOOLEAN subMinkowsky "Subtract Minkowsky metric when combining metrics"
+{
+} yes

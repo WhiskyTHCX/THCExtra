@@ -1,0 +1,13 @@
+Cactus Code Thorn AddPuncture
+Author(s)    : David Radice <dradice@astro.princeton.edu>
+Maintainer(s): David Radice <dradice@astro.princeton.edu>
+Licence      : GPLv3
+--------------------------------------------------------------------------
+
+1. Purpose
+
+Adds a puncture to an existing initial data
+
+A. Acknowledgements
+
+Much of this code comes from BBIDdataReader.c of BAM.

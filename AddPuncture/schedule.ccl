@@ -1,0 +1,8 @@
+# Schedule definitions for thorn AddPuncture
+
+SCHEDULE AddPuncture AT CCTK_INITIAL \
+    AFTER (ADMBase_InitialData ADMBase_InitialGauge HydroBase_Initial) \
+    BEFORE (ADMBase_PostInitial)
+{
+    LANG: C
+} "Adds a puncture to the initial data"
