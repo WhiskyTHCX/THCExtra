@@ -1,0 +1,7 @@
+# Main make.code.defn file for thorn NSTracker
+
+# Source files in this directory
+SRCS = nstracker.c
+
+# Subdirectories containing source files
+SUBDIRS =

@@ -1,0 +1,14 @@
+# Schedule definitions for thorn NSTracker
+
+STORAGE: ns_position
+
+SCHEDULE NSTracker_Startup AT CCTK_STARTUP
+{
+    LANG: C
+    OPTIONS: GLOBAL
+} "Register banner"
+
+SCHEDULE NSTracker_TrackNS AT CCTK_POSTSTEP
+{
+    LANG: C
+} "Track the star"

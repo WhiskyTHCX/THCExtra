@@ -1,0 +1,7 @@
+# Configuration definitions for thorn NSTracker
+
+PROVIDES NSTracker
+{
+    SCRIPT
+    LANG
+}

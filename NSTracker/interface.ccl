@@ -1,0 +1,8 @@
+# Interface definition for thorn NSTracker
+IMPLEMENTS: NSTracker
+INHERITS: Grid HydroBase SphericalSurface
+
+CCTK_REAL ns_position TYPE=SCALAR
+{
+    ns_pos_x ns_pos_y ns_pos_z
+} "Position of the NS"

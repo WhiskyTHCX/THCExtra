@@ -1,0 +1,27 @@
+# Parameter definitions for thorn NSTracker
+
+RESTRICTED:
+
+BOOLEAN reflection_z "Assume reflection symmetry across the xy-plane" STEERABLE=recover
+{
+} "no"
+
+BOOLEAN verbose "Print debugging info to screen" STEERABLE=recover
+{
+} "no"
+
+INT analyze_reflevel "Refinement level used to track the star" STEERABLE=recover
+{
+    0:* :: "Any valid refinement level index"
+} 0
+
+INT analyze_every "Compute the star position when iteration is multiple of this"
+{
+    1:* :: "Any positive number"
+} 32
+
+INT surface_index "A spherical surface index where we can store the NS location" STEERABLE=recover
+{
+    -1  :: "Do not store NS location"
+    0:* :: "Any spherical surface index"
+} -1
