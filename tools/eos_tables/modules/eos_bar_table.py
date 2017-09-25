@@ -21,7 +21,6 @@ length unit 1m, i.e. Pizza code units.
 
 import sys
 import os
-sys.path.append(os.path.join(sys.path[0],'../lib/'))
 import tables as h5
 from unitconv import *
 from math import *

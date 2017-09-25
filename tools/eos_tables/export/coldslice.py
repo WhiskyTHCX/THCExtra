@@ -41,14 +41,12 @@ parser.add_argument("-o", "--output", dest="output", required=True,
     help="Output base file name (will be overwritten)")
 parser.add_argument("-t", "--temperature", dest="temp", type=float,
     help="Slice temperature in MeV (defaults to the minimum on the table)")
-parser.add_argument("--fix-mbar", dest="change_rmd", action="store_true",
-    help="Do not redefine the baryon mass")
-parser.add_argument("--make-adiabatic", dest="make_adiabatic",
-    action="store_true", help="Do not make the EOS slice adiabatic")
-parser.add_argument("--resample", dest="resample", type=int, default=-1,
-    help="Resample the EOS table, if negative don't resample (default: -1)")
 parser.add_argument("--rm-radiation", dest="rm_radiation", action="store_true",
     help="Remove the radiation pressure part of the EOS")
+parser.add_argument("--attach-poly", dest="attach_poly", action="store_true",
+    help="Attach a polytrope at low density")
+parser.add_argument("--resample", dest="resample", type=int, default=-1,
+    help="Resample the EOS table, if negative don't resample (default: -1)")
 parser.add_argument("-l", "--lorene", dest="lorene", action="store_true",
     help="Output the EOS slice in LORENE format")
 parser.add_argument("-p", "--pizza", dest="pizza", action="store_true",
@@ -160,14 +158,22 @@ eos_slice = EOS_Table(
     mbar = mb_PU,
     csnd = np.sqrt(cs2_beta)*c_PU,
     name = args.output)
-if args.change_rmd:
-    eos_slice = eos_slice.change_restmass_def(
-        eos_slice.natural_restmass_def(3))
-if args.make_adiabatic:
-    print(INFO + "making the EOS slice adiabatic")
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# Attach polytrope at low density and resample
+# -----------------------------------------------------------------------------
+if args.attach_poly:
+    print(INFO + "attaching polytrope")
+    eos_slice = eos_slice.make_restmass_natural(3)
+    eos_slice = eos_slice.make_poly_compatible(3)
+    if args.resample > 0:
+        npoints = args.resample
+    else:
+        npoints = eos_slice.rmd.shape[0] + 50
+    eos_slice = eos_slice.attach_poly(1*uc.density, npoints)
     eos_slice = eos_slice.make_adiabatic()
-    eos_slice.compute_soundspeed()
-if args.resample > 0:
+elif args.resample > 0:
     print(INFO + "resampling the EOS slice")
     eos_slice = eos_slice.resample_geom(args.resample)
 # -----------------------------------------------------------------------------

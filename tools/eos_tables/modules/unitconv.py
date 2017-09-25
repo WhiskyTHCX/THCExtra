@@ -127,5 +127,3 @@ SI_UNITS      = Units(1.0,1.0,1.0)
 CGS_UNITS     = Units(1e-2, 1.0, 1e-3)
 CACTUS_UNITS  = geom_umass(M_SOL_SI)
 PIZZA_UNITS   = geom_ulength(1.0)
-
-

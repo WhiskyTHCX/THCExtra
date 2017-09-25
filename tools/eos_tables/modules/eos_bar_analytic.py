@@ -15,7 +15,6 @@ Currently implemented are polytropic and piecewise polytropic EOS.
 
 import sys
 import os
-sys.path.append(os.path.join(sys.path[0],'../lib/'))
 from unitconv import *
 from math import *
 from numpy import *
