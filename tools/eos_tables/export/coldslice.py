@@ -172,7 +172,7 @@ if args.attach_poly:
     else:
         npoints = eos_slice.rmd.shape[0] + 50
     eos_slice = eos_slice.attach_poly(1*uc.density, npoints)
-    eos_slice = eos_slice.make_adiabatic()
+    eos_slice = eos_slice.make_adiabatic(remove_unphys_csnd=True)
 elif args.resample > 0:
     print(INFO + "resampling the EOS slice")
     eos_slice = eos_slice.resample_geom(args.resample)
