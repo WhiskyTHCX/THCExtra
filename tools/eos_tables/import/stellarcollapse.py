@@ -68,13 +68,13 @@ if args.mass_factor is None:
     table["mass_factor"] = ut.UAMU_MEV*(1.0 - table["energy_shift"]/ut.C_CGS**2)
 else:
     table["mass_factor"] = args.mass_factor
-table["mass_factor"] = np.array([table["mass_factor"]])
+table["mass_factor"] = np.array(table["mass_factor"])
 
 table["internalEnergy"] -= table["energy_shift"]
 table["energy_shift"][0] = 0.0
 
 # energy density in units of c^2 g
-rho3d = table["density"].reshape(1, 1, table["density"].shape[0])
+rho3d = table["density"].reshape((1, 1, table["density"].shape[0]))
 energy = rho3d * (1 + table["internalEnergy"]/(ut.C_CGS**2))
 
 # number density in fm^{-3}
@@ -85,7 +85,6 @@ mass_factor_cgs = (table["mass_factor"]*ut.MEV_CGS)/(ut.C_CGS**2)
 table["density"] = ndens*(mass_factor_cgs/ut.FM_CGS**3)
 table["logrho"] = np.log10(table["density"])
 
-rho3d = table["density"].reshape(1, 1, table["density"].shape[0])
 table["internalEnergy"] = ut.C_CGS**2 * (energy/table["density"] - 1.0)
 assert np.all(table["internalEnergy"] > 0)
 table["logenergy"] = np.log10(table["internalEnergy"])
