@@ -47,6 +47,10 @@ parser.add_argument("--attach-poly", dest="attach_poly", action="store_true",
     help="Attach a polytrope at low density")
 parser.add_argument("--resample", dest="resample", type=int, default=-1,
     help="Resample the EOS table, if negative don't resample (default: -1)")
+parser.add_argument("--cleanup", dest="cleanup", action="store_true",
+    help="Ensure that the specific energy density and pressure are monotonic")
+parser.add_argument("--hdf5", dest="hdf5", action="store_true",
+    help="Output the EOS slice in HDF5 format")
 parser.add_argument("-l", "--lorene", dest="lorene", action="store_true",
     help="Output the EOS slice in LORENE format")
 parser.add_argument("-p", "--pizza", dest="pizza", action="store_true",
@@ -171,17 +175,26 @@ if args.attach_poly:
         npoints = args.resample
     else:
         npoints = eos_slice.rmd.shape[0] + 50
-    eos_slice = eos_slice.attach_poly(1*uc.density, npoints)
-    eos_slice = eos_slice.make_adiabatic(remove_unphys_csnd=True)
+    eos_slice = eos_slice.attach_poly(100*uc.density, npoints)
+    eos_slice = eos_slice.make_adiabatic(remove_unphys_csnd=False)
+    eos_slice.csnd = np.minimum(eos_slice.csnd, 0.999)
 elif args.resample > 0:
     print(INFO + "resampling the EOS slice")
     eos_slice = eos_slice.resample_geom(args.resample)
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
+# Ensure that the pressure is monotonically increasing
+# -----------------------------------------------------------------------------
+eos_slice = eos_slice.remove_unphys_points()
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
 # Output the data in ASCII format
 # -----------------------------------------------------------------------------
 print(INFO + "exporting tables")
+if args.hdf5:
+    eos_slice.save("{}.hdf5".format(args.output))
 if args.lorene:
     eos_slice.save_lorene("{}.lorene".format(args.output))
 if args.pizza:

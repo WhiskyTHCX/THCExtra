@@ -174,12 +174,16 @@ class EOS_Table(object):
     """This warns in case of odd, but allowed behavior"""
     if (any(self.sed <=0)):
       self._protest('Detected negative specific energy')
+    if (not is_strictly_increasing(self.p)):
+      self._protest("Pressure not strictly increasing")
     if (any(self.hm1 <=0)):
       self._protest('Detected enthalpy < 1')
     if (not is_strictly_increasing(self.sed)):
       self._protest('Specific energy not strictly increasing')
     if (not is_strictly_increasing(self.hm1)):
       self._protest('Specific enthalpy not strictly increasing')
+    if (not is_strictly_increasing(self.gm1)):
+      self._protest('Hydrostatic potential not strictly increasing')
   #
   def resample_geom(self, npoints, rmd_min=None, rmd_max=None):
     """Returns EOS resampled at geometrically spaced restmass densities
@@ -351,6 +355,42 @@ class EOS_Table(object):
 
     return join_eos([poly,self],[self.rmd[0]], rmd_new, mbar=self.mbar)
   #
+  def remove_unphys_points(self):
+    """Remove points for which p and/or sed are not increasing"""
+    def copy(a):
+      if a is None:
+        return None
+      else:
+        return a.copy()
+    def restrict(a, mask):
+      if a is None:
+        return None
+      else:
+        return a[mask]
+
+    rmd_new  = copy(self.rmd)
+    sed_new  = copy(self.sed)
+    p_new    = copy(self.p)
+    csnd_new = copy(self.csnd)
+    efr_new  = copy(self.efr)
+    temp_new = copy(self.temp)
+
+    while True:
+      mask = ones_like(p_new, dtype=bool)
+      mask[1:] = mask[1:] & (diff(sed_new) > 0)
+      mask[1:] = mask[1:] & (diff(p_new) > 0)
+      if all(mask):
+        break
+      rmd_new  = restrict(rmd_new,  mask)
+      sed_new  = restrict(sed_new,  mask)
+      p_new    = restrict(p_new,    mask)
+      csnd_new = restrict(csnd_new, mask)
+      efr_new  = restrict(efr_new,  mask)
+      temp_new = restrict(temp_new, mask)
+
+    return EOS_Table(rmd_new, sed_new, p_new, isentropic=self.isentropic,
+        mbar=self.mbar, csnd=csnd_new, efr=efr_new, temp=temp_new)
+  #
   @property
   def has_temp(self):
     return (self.temp is not None)
@@ -423,7 +463,10 @@ class EOS_Table(object):
     self.p_from_rmd     = cubic_spline_loglog(self.rmd, self.p)
     self.sed_from_rmd   = cubic_spline(self.rmd, self.sed)
     self.hm1_from_rmd   = cubic_spline(self.rmd, self.hm1)
-    self.rmd_from_hm1   = cubic_spline(self.hm1, self.rmd)
+    if is_strictly_increasing(self.hm1):
+      self.rmd_from_hm1 = cubic_spline(self.hm1, self.rmd)
+    else:
+      self.rmd_from_hm1 = None
 
     if (self.efr is not None):
       self.efr_from_rmd   = cubic_spline(self.rmd, self.efr)
@@ -481,23 +524,23 @@ class EOS_Table(object):
   def save(self, path):
     """Save EOS in hdf5 file. """
     u       = self.units
-    h5file  = h5.openFile(path, mode = "w", title = "Tabulated barotropic EOS")
-    group   = h5file.createGroup(h5file.root, 'eos_table', 'EOS Tables')
-    a_rmd   = h5file.createArray(group, 'rmd', self.rmd * u.density,
+    h5file  = h5.open_file(path, mode = "w", title = "Tabulated barotropic EOS")
+    group   = h5file.create_group(h5file.root, 'eos_table', 'EOS Tables')
+    a_rmd   = h5file.create_array(group, 'rmd', self.rmd * u.density,
                   "Rest mass density [kg m^-3]")
-    a_sed   = h5file.createArray(group, 'sed', self.sed,
+    a_sed   = h5file.create_array(group, 'sed', self.sed,
                                   "Specific energy [dimensionless]")
-    a_press = h5file.createArray(group, 'press', self.p * u.pressure,
+    a_press = h5file.create_array(group, 'press', self.p * u.pressure,
                                   "Pressure [Pa]")
     if (self.has_csnd):
-      a_csnd   = h5file.createArray(group, 'csnd', self.csnd * u.velocity,
+      a_csnd   = h5file.create_array(group, 'csnd', self.csnd * u.velocity,
                                   "Soundspeed [m/s]")
     #
     if (self.has_efr):
-      a_efr    = h5file.createArray(group, 'efr', self.efr, "Electron fraction")
+      a_efr    = h5file.create_array(group, 'efr', self.efr, "Electron fraction")
     #
     if (self.has_temp):
-      a_temp   = h5file.createArray(group, 'temp', self.temp, "Temperature [MeV]")
+      a_temp   = h5file.create_array(group, 'temp', self.temp, "Temperature [MeV]")
     #
     h5file.root._v_attrs.eos_name   = self.name
     h5file.root._v_attrs.comment    = self.comment
@@ -569,7 +612,7 @@ class EOS_Table(object):
 def load_eos(path):
   """Load EOS_Table object from hdf5 file"""
   u = PIZZA_UNITS
-  with h5.openFile(path, mode = 'r') as h5file:
+  with h5.open_file(path, mode = 'r') as h5file:
     name        = h5file.root._v_attrs.eos_name
     comment     = h5file.root._v_attrs.comment
     isentropic  = h5file.root._v_attrs.isentropic
