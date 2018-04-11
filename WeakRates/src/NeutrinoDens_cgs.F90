@@ -6,7 +6,9 @@
 INTEGER FUNCTION NeutrinoDens_cgs(rho, temp, ye,&
                                    n_nue, n_nua, n_nux, en_nue, en_nua, en_nux)
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     use ieee_arithmetic
+#endif
     use table3d_mod
     use lk_interpolations
     use weak_constants
@@ -45,6 +47,7 @@ INTEGER FUNCTION NeutrinoDens_cgs(rho, temp, ye,&
     en_nua = 4.0d0 * pi / hc_mevcm**3 * temp**4 * FERMI3(eta_nua)
     en_nux = 16.0d0 * pi / hc_mevcm**3 * temp**4 * FERMI3(eta_nux)
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     if (.not.ieee_is_finite(n_nue)) then
        write(*,*) "NeutrinoDens_cgs: NaN/Inf in n_nue", rho, temp, ye
        NeutrinoDens_cgs= -1
@@ -74,6 +77,7 @@ INTEGER FUNCTION NeutrinoDens_cgs(rho, temp, ye,&
        write(*,*) "NeutrinoDens_cgs: NaN/Inf in en_nux", rho, temp, ye
        NeutrinoDens_cgs= -1
     endif
+#endif
 
     return
 END FUNCTION NeutrinoDens_cgs

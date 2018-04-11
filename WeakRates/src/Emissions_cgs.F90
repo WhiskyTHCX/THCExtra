@@ -4,7 +4,9 @@
 
 INTEGER FUNCTION Emissions_cgs(rho, temp, ye,&
                              R_nue, R_nua, R_nux, Q_nue, Q_nua, Q_nux)
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     use ieee_arithmetic
+#endif
     use table3d_mod
     use lk_interpolations
     use weak_constants
@@ -172,6 +174,7 @@ INTEGER FUNCTION Emissions_cgs(rho, temp, ye,&
     Q_nua = Qbeta_nua + Qpair_nua + Qplasm_nua !+ Qbrem
     Q_nux = Qpair_nux + Qplasm_nux !+ 4.0d0 * Qbrem
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     if (.not.ieee_is_finite(R_nue)) then
        write(*,*) "Emissions_cgs: NaN/Inf in R_nue", rho, temp, ye
        Emissions_cgs = -1
@@ -201,6 +204,7 @@ INTEGER FUNCTION Emissions_cgs(rho, temp, ye,&
        write(*,*) "Emissions_cgs: NaN/Inf in Q_nux", rho, temp, ye
        Emissions_cgs = -1
     endif
+#endif
 
     return
 END FUNCTION Emissions_cgs

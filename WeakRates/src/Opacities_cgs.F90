@@ -18,7 +18,9 @@ INTEGER FUNCTION Opacities_cgs(rho, temp, ye, &
     !             kappa_1_nux heavy nu opct. for energy tranport.
     !----------------------------------------------------------------------
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     use ieee_arithmetic
+#endif
     use table3d_mod
     use weak_constants
 
@@ -73,6 +75,7 @@ INTEGER FUNCTION Opacities_cgs(rho, temp, ye, &
        Opacities_cgs = -1
     endif
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     if (.not.ieee_is_finite(kappa_0_nue_abs)) then
        write(*,*) "Opacities_cgs: NaN/Inf in kappa_0_nue_abs"
        Opacities_cgs = -1
@@ -102,6 +105,7 @@ INTEGER FUNCTION Opacities_cgs(rho, temp, ye, &
        write(*,*) "Opacities_cgs: NaN/Inf in kappa_0_nux_sct"
        Opacities_cgs = -1
     endif
+#endif
 
     kappa_0_nue = kappa_0_nue_abs + kappa_0_nue_sct
     kappa_0_nua = kappa_0_nua_abs + kappa_0_nua_sct
@@ -118,7 +122,9 @@ INTEGER FUNCTION Absorption_cgs(rho, temp, ye,&
                                  kappa_0_nue, kappa_0_nua, kappa_0_nux, &
                                  kappa_1_nue, kappa_1_nua, kappa_1_nux)
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     use ieee_arithmetic
+#endif
     use table3d_mod
     use weak_constants
     use lk_interpolations
@@ -192,6 +198,7 @@ INTEGER FUNCTION Absorption_cgs(rho, temp, ye,&
     kappa_1_nux = zeta_nux *&
                         (temp * mev_to_erg)**2 * FERMI5O3(eta_nux)
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     if (.not.ieee_is_finite(kappa_0_nue)) then
        write(*,*) "Absorption_cgs: NaN/Inf in kappa_0_nue", rho, temp, ye
        Absorption_cgs = -1
@@ -221,6 +228,7 @@ INTEGER FUNCTION Absorption_cgs(rho, temp, ye,&
        write(*,*) "Absorption_cgs: NaN/Inf in kappa_1_nux", rho, temp, ye
        Absorption_cgs = -1
     endif
+#endif
 
     return
 END FUNCTION Absorption_cgs
@@ -230,7 +238,9 @@ INTEGER FUNCTION Scattering_cgs(rho, temp, ye,&
                                  kappa_0_nue, kappa_0_nua, kappa_0_nux, &
                                  kappa_1_nue, kappa_1_nua, kappa_1_nux)
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     use ieee_arithmetic
+#endif
     use table3d_mod
     use weak_constants
     use lk_interpolations
@@ -322,6 +332,7 @@ INTEGER FUNCTION Scattering_cgs(rho, temp, ye,&
     kappa_1_nux = zeta_nux *&
                         (temp * mev_to_erg)**2 * FERMI5O3(eta_nux)
 
+#ifndef FORTRAN_DISABLE_IEEE_ARITHMETIC
     if (.not.ieee_is_finite(kappa_0_nue)) then
        write(*,*) "Scattering_cgs: NaN/Inf in kappa_0_nue", rho, temp, ye
        Scattering_cgs = -1
@@ -351,6 +362,7 @@ INTEGER FUNCTION Scattering_cgs(rho, temp, ye,&
        write(*,*) "Scattering_cgs: NaN/Inf in kappa_1_nux", rho, temp, ye
        Scattering_cgs = -1
     endif
+#endif
 
     return
 END FUNCTION Scattering_cgs
