@@ -5,7 +5,7 @@ implements: EOS_Thermal
 
 INCLUDES HEADER: eos_thermal.h in eos_thermal.h
 INCLUDES HEADER: global_eos.h in global_eos_thermal.h
-USES INCLUDE : global_eos.h eos_thermal.h
+USES INCLUDE : global_eos_thermal.h eos_thermal.h
 
 
 CCTK_INT FUNCTION EOS_Press_Derivs_From_Rho_Eps_Ye(CCTK_REAL IN rho, CCTK_REAL IN eps, CCTK_REAL IN ye,\
