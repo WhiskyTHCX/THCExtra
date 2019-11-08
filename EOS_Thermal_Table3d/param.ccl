@@ -14,17 +14,17 @@ restricted:
 # One can set eos_db_loc = $ENV{HOME} to create parfiles independent
 # of the cluster.
 #
-CCTK_STRING eos_db_loc "Base path for EOSs"
+CCTK_STRING eos_db_loc "Base path for EOSs" STEERABLE=RECOVER
 {
   ".+" :: "Pathname"
 } "."
 
-CCTK_STRING eos_folder "Path to EOS folder"
+CCTK_STRING eos_folder "Path to EOS folder" STEERABLE=RECOVER
 {
   ".+" :: "Pathname relative to eos_db_loc"
 } "."
 
-CCTK_STRING eos_filename "Filename containing EOS table"
+CCTK_STRING eos_filename "Filename containing EOS table" STEERABLE=RECOVER
 {
   ".+" :: "Filename"
 } "eos_table.h5"

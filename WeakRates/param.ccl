@@ -3,7 +3,7 @@
 
 restricted:
 
-CCTK_STRING table_filename "Filename containing the table"
+CCTK_STRING table_filename "Filename containing the table" STEERABLE=RECOVER
 {
   ".+" :: "Filename"
 } "eos_table.h5"
