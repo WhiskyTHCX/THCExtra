@@ -38,6 +38,8 @@ parser.add_argument("-n", "--name", dest="name", required=True,
 parser.add_argument("-m", "--baryon-mass", dest="mass_factor", type=float,
         help="Fiducial baryon mass in MeV. "\
             "If not specified, it is computed internally")
+parser.add_argument("--rho-max", dest="rho_max", type=float, default=0.0,
+        help="Exclude regions with densities larger than rho_max")
 args = parser.parse_args()
 # -----------------------------------------------------------------------------
 
@@ -49,6 +51,15 @@ table = {}
 for k in dfile.keys():
     table[k] = np.array(dfile[k])
 del dfile
+
+# Remove high density region
+if args.rho_max > 0:
+  rho = 10.0**table["logrho"]
+  irmax = np.searchsorted(rho, args.rho_max, side='right')
+  table["logrho"] = table["logrho"][:irmax]
+  for k in table.keys():
+    if len(table[k].shape) == 3:
+      table[k] = table[k][:,:,:irmax]
 
 # Convert/rename variables
 table["density"]        = 10.0**table["logrho"]
