@@ -1,0 +1,35 @@
+# Interface definition for thorn BHTrackerMany
+IMPLEMENTS: BHTrackerMany
+INHERITS: Grid ADMBase CarpetRegrid2 SphericalSurface
+
+CCTK_REAL bh_time[10] TYPE=SCALAR TAGS='Checkpoint="yes"' "Tracker time"
+
+CCTK_REAL bh_position[10] TYPE=SCALAR TAGS='Checkpoint="yes"'
+{
+    bh_pos_x bh_pos_y bh_pos_z
+} "Position of the BH"
+
+CCTK_REAL bh_position_old[10] TYPE=SCALAR TAGS='Checkpoint="yes"'
+{
+    bh_pos_x_old bh_pos_y_old bh_pos_z_old
+} "Previous position of the BH"
+
+CCTK_REAL bh_velocity[10] TYPE=SCALAR TAGS='Checkpoint="yes"'
+{
+    bh_vel_x bh_vel_y bh_vel_z
+} "Velocity of the BH"
+
+CCTK_INT bh_num_levels[10] TYPE=SCALAR TAGS='Checkpoint="yes"' "Number of refinemet levels in the grid tracking the BH"
+
+CCTK_INT FUNCTION                                      \
+    InterpGridArrays                                   \
+        (CCTK_POINTER_TO_CONST IN cctkGH,              \
+         CCTK_INT              IN N_dims,              \
+         CCTK_INT              IN order,               \
+         CCTK_INT              IN N_interp_points,     \
+         CCTK_POINTER_TO_CONST IN interp_coords,       \
+         CCTK_INT              IN N_input_arrays,      \
+         CCTK_INT        ARRAY IN input_array_indices, \
+         CCTK_INT              IN N_output_arrays,     \
+         CCTK_POINTER          IN output_arrays)
+USES FUNCTION InterpGridArrays

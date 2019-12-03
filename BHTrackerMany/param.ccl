@@ -1,0 +1,64 @@
+# Parameter definitions for thorn BHTrackerMany
+
+RESTRICTED:
+
+BOOLEAN verbose "Print debugging info to screen" STEERABLE=recover
+{
+} "no"
+
+BOOLEAN track[10] "Track BH"
+{
+} "no"
+
+REAL initial_x[10] "Initial x coordinate position of the BH"
+{
+    *:* :: "Any value"
+} 0.0
+
+REAL initial_y[10] "Initial y coordinate position of the BH"
+{
+    *:* :: "Any value"
+} 0.0
+
+REAL initial_z[10] "Initial z coordinate position of the BH"
+{
+    *:* :: "Any value"
+} 0.0
+
+INT index_region[10] "CarpetRegrid2 region corresponding to the BH"
+{
+    -1:* :: "If negative track only, do not steer the AMR"
+} -1
+
+BOOLEAN adapt_resolution[10] "Steer the number of active regions depending on the BH size" STEERABLE=always
+{
+} "no"
+
+REAL adapt_factor_refine[10] "Refine if the BH is smaller than this times the refinement level radius" STEERABLE=always
+{
+    (0:1) :: "Any number between 0 and 1"
+} 0.75
+
+REAL adapt_factor_coarse[10] "Coarse if the BH is larger than this times the refinement level radius" STEERABLE=always
+{
+    (1:*) :: "Any number between 0 and 1"
+} 1.5
+
+INT adapt_nlevels_min[10] "Minimum number of refinement levels" STEERABLE=always
+{
+    1:30 :: "Only used if adapt_resolution is yes"
+} 1
+
+INT adapt_nlevels_max[10] "Maximum number of refinement levels" STEERABLE=always
+{
+    1:30 :: "Only used if adapt_resolution is yes"
+} 30
+
+BOOLEAN update_surface[10] "Update SphericalSurface origin" STEERABLE=always
+{
+} "no"
+
+INT index_surface[10] "SphericalSurface storing the BH informations" STEERABLE=always
+{
+    -1:* :: "Only used if adapt_resolution is yes"
+} -1
