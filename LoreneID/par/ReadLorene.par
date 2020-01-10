@@ -1,0 +1,107 @@
+ActiveThorns = "
+    ADMBase
+    ADMCoupling
+    ADMMacros
+    Boundary
+    Carpet
+    CarpetInterp
+    CarpetIOHDF5
+    CarpetLib
+    CarpetReduce
+    CarpetSlab
+    CartGrid3d
+    CoordBase
+    EOS_Barotropic
+    EOS_Thermal
+    EOS_Thermal_Extable
+    EOS_Thermal_Table3d
+    HydroBase
+    ID_Switch_EOS
+    InitBase
+    IOUtil
+    LoreneID
+    PizzaBase
+    PizzaIDBase
+    PizzaNumUtils
+    Slab
+    StaticConformal
+    SymBase
+    Time
+"
+
+Cactus::terminate			= "iteration"
+Cactus::cctk_itlast			= 0
+
+Grid::avoid_origin			= "no"
+Grid::domain			= "full"
+Grid::type			= "coordbase"
+
+CoordBase::xmin			= -@XMAX@
+CoordBase::xmax			=  @XMAX@
+CoordBase::ymin			= -@YMAX@
+CoordBase::ymax			=  @YMAX@
+CoordBase::zmin			=  0.0
+CoordBase::zmax			=  @ZMAX@
+
+CoordBase::spacing			= "numcells"
+CoordBase::ncells_x			= @NCELLSX@
+CoordBase::ncells_y			= @NCELLSY@
+CoordBase::ncells_z			= @NCELLSZ@
+
+Carpet::domain_from_coordbase		= "yes"
+Driver::ghost_size			= 0
+
+ADMBase::initial_data		= "LoreneBNS"
+ADMBase::initial_lapse		= "LoreneBNS"
+ADMBase::initial_shift		= "LoreneBNS"
+ADMBase::initial_dtlapse		= "zero"
+ADMBase::initial_dtshift		= "zero"
+HydroBase::initial_hydro		= "LoreneBNS"
+HydroBase::initial_entropy		= "IDSwitchEOS"
+HydroBase::initial_temperature		= "LoreneBNS"
+HydroBase::initial_Y_e		= "LoreneBNS"
+
+# File describing a one-parametric EOS in Pizza format. Used only for initial data.
+PizzaIDBase::eos_file		= "@HOME@/Data/EOS/LS220/0.01MeVbeta/LS220B0.pizza"
+
+LoreneID::lorene_bns_file		= "@HOME@/Data/LoreneData/david_ls220_T001_135135_40km/33x21x20/resu.d"
+LoreneID::rho_cut			= 1.0e-5
+
+# Geometric unit system for initial data, specified by length unit.
+# use CACTUS units
+PizzaBase::length_unit		= 1476.7161818921163
+
+ID_Switch_EOS::sync_eps_temp		= "yes"
+ID_Switch_EOS::temp_from_eps		= "no"
+ID_Switch_EOS::limit_efrac		= "yes"
+
+EOS_Thermal::evol_eos_name		= "Extable"
+EOS_Thermal_Extable::rho_max		= 1e10
+EOS_Thermal_Extable::temp_max		= 1000
+EOS_Thermal_Extable::extend_ye		= "yes"
+
+EOS_Thermal_Table3d::eos_db_loc		= "@HOME@/Data/EOS"
+EOS_Thermal_Table3d::eos_folder		= "LS220"
+EOS_Thermal_Table3d::eos_filename		= "LS_220_hydro_27-Sep-2014.h5"
+
+IOUtil::out_dir			= "./data/"
+IOUtil::strict_io_parameter_check		= "yes"
+IOUtil::parfile_write		= "copy"
+
+CarpetIOHDF5::out_vars		= "
+    ADMBase::lapse
+    ADMBase::shift
+    ADMBase::metric
+    ADMBase::curv
+    HydroBase::rho
+    HydroBase::vel
+    HydroBase::eps
+    HydroBase::press
+    HydroBase::Y_e
+"
+
+CarpetIOHDF5::output_ghost_points		= no
+CarpetIOHDF5::output_boundary_points		= no
+CarpetIOHDF5::out_every		= 1
+
+# vim: set ft=sh tabstop=20 noexpandtab :
