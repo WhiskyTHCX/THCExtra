@@ -1,19 +1,21 @@
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <unistd.h>
+
 #include "cctk.h"
 #include "cctk_Parameters.h"
 #include "cctk_Arguments.h"
 #include "cctk_Functions.h"
 #include "pizza_central.h"
+
+#include "mpi.h"
+
 #include <bin_ns.h>
 #include <algorithm>
 #include <stdexcept>
-#include <fstream>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/format.hpp>
 
 namespace LoreneID {
-
-namespace bfs = boost::filesystem;
 
 /// Copy data array and make sure pointers are nonzero
 /** dst Destination
@@ -23,45 +25,42 @@ namespace bfs = boost::filesystem;
 void check_and_copy(CCTK_REAL* dst, const CCTK_REAL* src, size_t s)
 {
   if ((0==src) || (0==dst))
-    throw std::runtime_error("LoreneID: Cactus passed NULL pointer to active timelevels.");
+    CCTK_ERROR("LoreneID: Cactus passed NULL pointer to active timelevels.");
   copy(src, src+s, dst);
 }
 
-///Ensure LORENE input files exists
-/**
-This makes sure the initial data file exists. In case of tabulated
-EOS, LORENE reads a file with the eos_table. The location is hardcoded
-in the data file. If the hardcoded path is not absolute, we need to
-link the eos file from the same directory as the data file to the
-current directory.
-**/
-void check_files(const char *filename, bool link_eos)
+/// Makes a copy of a file
+void copy_file(char const * src, char const * dst)
 {
-
-  bfs::path bnsdata  = bfs::canonical(bfs::path(filename));
-  if (!bfs::exists(bnsdata)) {
-    throw runtime_error("LoreneID: initial data file not found");
+  // Source and destination are the same... nothing to do
+  if (0 == strcmp(src, dst)) {
+    return;
   }
 
-  if (link_eos) {
-    const char* lorene_hardcoded_eos = "eos_akmalpr.d";
-    bfs::path eoslink(lorene_hardcoded_eos);
-    bfs::path datadir  = bnsdata.parent_path();
-    bfs::path dummyeos = datadir / lorene_hardcoded_eos;
-    if (!bfs::exists(dummyeos)) {
-      throw runtime_error("LoreneID: dummy eos file not found");
-    }
-    //careful here, symlink is created in paralell by other MPI procs
-    //=> link, ignore any error, then check if symlink present
-    boost::system::error_code err;
-    bfs::create_symlink(dummyeos, eoslink, err);
-    if (! bfs::exists(eoslink)) {
-      throw runtime_error("LoreneID: could not create symbolic link to dummy eos.");
-    }
+  char msg[BUFSIZ];
+  FILE * fsrc = fopen(src, "r");
+  if (!fsrc) {
+    snprintf(msg, BUFSIZ, "File not found: \"%s\"", src);
+    CCTK_ERROR(msg);
   }
-}
+  FILE * fdst = fopen(dst, "w");
+  if (!fdst) {
+    fclose(fsrc);
+    snprintf(msg, BUFSIZ, "Could not open file: \"%s\"", src);
+    CCTK_ERROR(msg);
+  }
+
+  int ch;
+  while ((ch = getc(fsrc)) != EOF) {
+    putc(ch, fdst);
+  }
+
+  fclose(fsrc);
+  fclose(fdst);
+  sync();
 }
 
+} // namespace
 
 using namespace std;
 using namespace Pizza;
@@ -91,17 +90,30 @@ extern "C" void LoreneID_LoadMeudon(CCTK_ARGUMENTS)
   for(int i=0; i<cctk_lsh[0]; i++) {
     for(int j=0; j<cctk_lsh[1]; j++) {
       for(int k=0; k<cctk_lsh[2]; k++) {
-	      int i3D = CCTK_GFINDEX3D(cctkGH, i, j, k);
-	      x_ulorene[i3D] = x[i3D] * length_ca_in_lo;
-	      y_ulorene[i3D] = y[i3D] * length_ca_in_lo;
-	      z_ulorene[i3D] = z[i3D] * length_ca_in_lo;
-	    }
+        int i3D = CCTK_GFINDEX3D(cctkGH, i, j, k);
+        x_ulorene[i3D] = x[i3D] * length_ca_in_lo;
+        y_ulorene[i3D] = y[i3D] * length_ca_in_lo;
+        z_ulorene[i3D] = z[i3D] * length_ca_in_lo;
+      }
     }
   }
 
   CCTK_INFO("Reading Meudon BNS initial data.");
   try {
-    check_files(lorene_bns_file, link_dummy_eos);
+    if (0 != access(lorene_bns_file, R_OK)) {
+      char msg[BUFSIZ];
+      snprintf(msg, BUFSIZ, "File not found: \"%s\"", lorene_bns_file);
+      CCTK_ERROR(msg);
+    }
+    if (copy_lorene_eos) {
+      int rank;
+      MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+      if (0 == rank) {
+        copy_file(lorene_tab_file, lorene_eos_name);
+      }
+      MPI_Barrier(MPI_COMM_WORLD);
+    }
+
     // call the Lorene routine to transform spectral data to cartesian
     Bin_NS binary_system(local_grid_size, x_ulorene, y_ulorene, z_ulorene, lorene_bns_file);
 
@@ -140,10 +152,10 @@ extern "C" void LoreneID_LoadMeudon(CCTK_ARGUMENTS)
     check_and_copy(velocity[2], binary_system.u_euler_z, local_grid_size);
   }
   catch (exception &e) {
-    CCTK_WARN(0, e.what());
+    CCTK_ERROR(e.what());
   }
   catch (...) {
-    CCTK_WARN(0, "Unknown exception in LoreneID_LoadMeudon");
+    CCTK_ERROR("Unknown exception in LoreneID_LoadMeudon");
   }
 
 }

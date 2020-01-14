@@ -48,7 +48,17 @@ CCTK_STRING lorene_bns_file "File containing LORENE initial data"
   ".+" :: "Pathname"
 } "inif.d"
 
-BOOLEAN link_dummy_eos "Work around LORENE EOS file quirk."
+CCTK_STRING lorene_tab_file "File containing LORENE EOS"
+{
+  ".+" :: "Pathname"
+} ""
+
+CCTK_STRING lorene_eos_name "EOS filename hardcoded in the initial data"
+{
+  ".+" :: "Filename"
+} "eos_akmalpr.d"
+
+BOOLEAN copy_lorene_eos "Work around LORENE EOS file quirk."
 {
 } "no"
 
