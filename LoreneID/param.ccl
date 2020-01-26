@@ -51,7 +51,7 @@ CCTK_STRING lorene_bns_file "File containing LORENE initial data"
 CCTK_STRING lorene_tab_file "File containing LORENE EOS"
 {
   ".+" :: "Pathname"
-} ""
+} "../BATCH/include/eos_akmalpr.d"
 
 CCTK_STRING lorene_eos_name "EOS filename hardcoded in the initial data"
 {
