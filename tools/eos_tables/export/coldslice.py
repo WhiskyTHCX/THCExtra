@@ -25,6 +25,7 @@ import os
 
 sys.path.append(os.path.dirname(sys.argv[0]) + "/../modules")
 import betaeq
+from betaeq import myinterp1d
 from eos_bar_table import COLWIDTH, EOS_Table
 import unitconv as ut
 
@@ -41,23 +42,33 @@ parser.add_argument("-o", "--output", dest="output", required=True,
     help="Output base file name (will be overwritten)")
 parser.add_argument("-t", "--temperature", dest="temp", type=float,
     help="Slice temperature in MeV (defaults to the minimum on the table)")
+parser.add_argument("-s", "--entropy", dest="entropy", type=float,
+    help="Make slice at a given entropy as opposed to a fixed temperature")
 parser.add_argument("--rm-radiation", dest="rm_radiation", action="store_true",
     help="Remove the radiation pressure part of the EOS")
 parser.add_argument("--attach-poly", dest="attach_poly", action="store_true",
     help="Attach a polytrope at low density")
 parser.add_argument("--resample", dest="resample", type=int, default=-1,
     help="Resample the EOS table, if negative don't resample (default: -1)")
-parser.add_argument("--cleanup", dest="cleanup", action="store_true",
-    help="Ensure that the specific energy density and pressure are monotonic")
 parser.add_argument("--hdf5", dest="hdf5", action="store_true",
     help="Output the EOS slice in HDF5 format")
+parser.add_argument("--ye", dest="ye", type=float,
+    help="Make a slice at fixed Ye as opposed to neutrino-less beta-equilibrium")
 parser.add_argument("-l", "--lorene", dest="lorene", action="store_true",
     help="Output the EOS slice in LORENE format")
 parser.add_argument("-p", "--pizza", dest="pizza", action="store_true",
     help="Output the EOS slice in PIZZA format")
 parser.add_argument("-r", "--rns", dest="rns", action="store_true",
     help="Output the EOS slice in RNS format")
+parser.add_argument("--rho-min", dest="rho_min", type=float,
+    help="Minimum density reached in the coldslice")
+parser.add_argument("--rho-max", dest="rho_max", type=float,
+    help="Maximum density reached in the coldslice")
 args = parser.parse_args()
+
+if args.temp is not None and args.entropy is not None:
+    msg = "Only one of temperature or entropy can be specified!"
+    raise argparse.ArgumentTypeError(msg)
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
@@ -72,6 +83,7 @@ table["ye"]  = np.array(dfile["ye"])
 table["cs2"] = np.array(dfile["cs2"])
 table["eps"] = np.array(dfile["internalEnergy"])
 table["press"] = np.array(dfile["pressure"])
+table["entropy"] = np.array(dfile["entropy"])
 table["mass_factor"] = np.array(dfile["mass_factor"])
 del dfile
 
@@ -82,6 +94,22 @@ table["mu_p"] = np.array(dfile["mu_p"])
 table["mu_n"] = np.array(dfile["mu_n"])
 del dfile
 
+if args.rho_min is not None:
+  print(INFO + "rho min: {}".format(float(args.rho_min)))
+  idx = table["rho"] > float(args.rho_min)
+  table["rho"] = table["rho"][idx]
+  for vname in table.keys():
+    if vname not in ["rho", "temp", "ye", "mass_factor"]:
+      table[vname] = table[vname][:,:,idx]
+
+if args.rho_max is not None:
+  print(INFO + "rho max: {}".format(float(args.rho_max)))
+  idx = table["rho"] < float(args.rho_max)
+  table["rho"] = table["rho"][idx]
+  for vname in table.keys():
+    if vname not in ["rho", "temp", "ye", "mass_factor"]:
+      table[vname] = table[vname][:,:,idx]
+
 mass_factor_cgs = table["mass_factor"]*(ut.MEV_CGS/(ut.C_CGS**2))
 nb = table["rho"]/(mass_factor_cgs/(ut.FM_CGS**3))
 # -----------------------------------------------------------------------------
@@ -89,32 +117,58 @@ nb = table["rho"]/(mass_factor_cgs/(ut.FM_CGS**3))
 # -----------------------------------------------------------------------------
 # Compute beta equilibrium slice
 # -----------------------------------------------------------------------------
-if args.temp is not None:
-    itemp = np.argmin(np.abs(args.temp - table["temp"]))
+temp = np.ones_like(table["rho"])
+ye_beta = np.zeros_like(table["rho"])
+if args.ye is not None:
+    ye_beta[:] = float(args.ye)
+    if args.temp is not None:
+        temp[:] = float(args.temp)
+    else:
+        temp[:] = table["temp"].min()
+    print(INFO + "making slice at Ye = {}, T = {}".format(ye_beta[0], temp[0]))
 else:
-    itemp = 0
-temp = table["temp"][itemp]
-print(INFO + "making beta-equilibrium slice at T = {} MeV".format(temp))
+    if args.entropy is not None:
+        print(INFO + "making beta equilibrium slice at S = {} kb".format(args.entropy))
+        for inb in range(nb.shape[0]):
+            t_of_s = betaeq.find_temp_given_ent(table["temp"], table["ye"],
+                    table["entropy"][:,:,inb], args.entropy)
+            mu_e_1d = np.zeros_like(table["ye"])
+            mu_p_1d = np.zeros_like(table["ye"])
+            mu_n_1d = np.zeros_like(table["ye"])
+            for iye in range(mu_e_1d.shape[0]):
+                mu_e_1d[iye] = myinterp1d(table["temp"], table["mu_e"][iye,:,inb])(t_of_s[iye])
+                mu_n_1d[iye] = myinterp1d(table["temp"], table["mu_n"][iye,:,inb])(t_of_s[iye])
+                mu_p_1d[iye] = myinterp1d(table["temp"], table["mu_p"][iye,:,inb])(t_of_s[iye])
+            ye_beta[inb] = betaeq.find_beta_eq(table["ye"], mu_e_1d, mu_n_1d, mu_p_1d)
+            temp[inb] = myinterp1d(table["ye"], t_of_s)(ye_beta[inb])
+    else:
+        if args.temp is not None:
+            mytemp = args.temp
+        else:
+            mytemp = table["temp"].min()
+        print(INFO + "making beta-equilibrium slice at T = {} MeV".format(mytemp))
+        temp[:] = mytemp
+    
+        for inb in range(nb.shape[0]):
+            mu_e_1d = myinterp1d(table["temp"], table["mu_e"][:,:,inb], axis=1)(temp[inb])
+            mu_n_1d = myinterp1d(table["temp"], table["mu_n"][:,:,inb], axis=1)(temp[inb])
+            mu_p_1d = myinterp1d(table["temp"], table["mu_p"][:,:,inb], axis=1)(temp[inb])
+            ye_beta[inb] = betaeq.find_beta_eq(table["ye"], mu_e_1d, mu_n_1d, mu_p_1d)
+        assert np.all(np.isfinite(ye_beta))
 
-ye_beta = np.empty_like(table["rho"])
 rho0_beta = table["rho"]
-ye_beta[:] = np.NAN
-for inb in range(nb.shape[0]):
-    ye_beta[inb] = betaeq.find_beta_eq(table["ye"],
-            table["mu_e"][:,itemp,inb], table["mu_n"][:,itemp,inb],
-            table["mu_p"][:,itemp,inb])
-assert np.all(np.isfinite(ye_beta))
-
 cs2_beta = np.empty_like(ye_beta)
 eps_beta = np.empty_like(ye_beta)
 press_beta = np.empty_like(ye_beta)
 for inb in range(nb.shape[0]):
-    cs2_beta[inb] = betaeq.interp_f_of_ye(table["ye"],
-            table["cs2"][:,itemp,inb])(ye_beta[inb])
-    eps_beta[inb] = betaeq.interp_f_of_ye(table["ye"],
-            table["eps"][:,itemp,inb])(ye_beta[inb])
-    press_beta[inb] = betaeq.interp_f_of_ye(table["ye"],
-            table["press"][:,itemp,inb])(ye_beta[inb])
+    # Interpolate quantities to the right temperature
+    cs2_1d = myinterp1d(table["temp"], table["cs2"][:,:,inb], axis=1)(temp[inb])
+    eps_1d = myinterp1d(table["temp"], table["eps"][:,:,inb], axis=1)(temp[inb])
+    press_1d = myinterp1d(table["temp"], table["press"][:,:,inb], axis=1)(temp[inb])
+    # Interpolate quantities to the right Ye
+    cs2_beta[inb] = myinterp1d(table["ye"], cs2_1d)(ye_beta[inb])
+    eps_beta[inb] = myinterp1d(table["ye"], eps_1d)(ye_beta[inb])
+    press_beta[inb] = myinterp1d(table["ye"], press_1d)(ye_beta[inb])
 assert np.all(np.isfinite(cs2_beta))
 assert np.all(np.isfinite(eps_beta))
 assert np.all(np.isfinite(press_beta))
@@ -158,7 +212,7 @@ eos_slice = EOS_Table(
     eps_beta/(ut.C_CGS**2),
     press_beta * uc.pressure,
     efr  = ye_beta,
-    temp = np.ones_like(ye_beta) * temp,
+    temp = temp,
     mbar = mb_PU,
     csnd = np.sqrt(cs2_beta)*c_PU,
     name = args.output)
