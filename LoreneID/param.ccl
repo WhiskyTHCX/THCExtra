@@ -43,12 +43,12 @@ EXTENDS keyword initial_Y_e
 
 private:
 
-CCTK_STRING lorene_bns_file "File containing LORENE initial data"
+CCTK_STRING lorene_bns_file "File containing LORENE initial data" STEERABLE=recover
 {
   ".+" :: "Pathname"
 } "inif.d"
 
-CCTK_STRING lorene_tab_file "File containing LORENE EOS"
+CCTK_STRING lorene_tab_file "File containing LORENE EOS" STEERABLE=recover
 {
   ".+" :: "Pathname"
 } "../BATCH/include/eos_akmalpr.d"

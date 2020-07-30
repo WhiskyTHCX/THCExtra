@@ -186,7 +186,7 @@ else:
             mytemp = table["temp"].min()
         print(INFO + "making beta-equilibrium slice at T = {} MeV".format(mytemp))
         temp_slice[:] = mytemp
-    
+
         for inb in range(nb.shape[0]):
             mu_e_1d = myinterp1d(table["temp"], table["mu_e"][:,:,inb], axis=1)(temp_slice[inb])
             mu_n_1d = myinterp1d(table["temp"], table["mu_n"][:,:,inb], axis=1)(temp_slice[inb])
