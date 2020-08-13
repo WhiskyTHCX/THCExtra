@@ -42,9 +42,9 @@ module Inf_NaN_Detection
     integer, parameter :: Double = selected_int_kind(precision(1.d0))
 
     ! Double precision IEEE values
-    integer(Double), parameter :: dNaN    = Z"7FF8000000000000"
-    integer(Double), parameter :: dPosInf = Z"7FF0000000000000"
-    integer(Double), parameter :: dNegInf = Z"FFF0000000000000"
+    integer(Double), parameter :: dNaN    = int( 9221120237041090560_8, kind=Double) ! Z"7FF8000000000000"
+    integer(Double), parameter :: dPosInf = int(+9218868437227405312_8, kind=Double) ! Z"7FF0000000000000"
+    integer(Double), parameter :: dNegInf = int(-9218868437227405312_8, kind=Double) ! Z"FFF0000000000000"
 
     ! Locatation of single and double precision sign bit (Intel)
     ! Subtract one because bit numbering starts at zero
