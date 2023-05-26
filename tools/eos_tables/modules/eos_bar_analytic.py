@@ -146,3 +146,30 @@ class EOS_Piecewise_Poly(object):
   #
 #
 
+def load_pizza(fname):
+  """Load an analytic EOS in PIZZA format"""
+  udens = PIZZA_UNITS.density
+  with open(fname, "r") as fobj:
+    header = {}
+    values = []
+    for line in fobj:
+      if "=" in line:
+        L = line.split("=")
+        header[L[0].strip().lower()] = L[1].strip().lower()
+      else:
+        values.append([float(x) for x in line.split()])
+    try:
+      eos_type = header["type"]
+      if eos_type == "polytrope":
+        poly_n   = float(header["poly_n"])
+        poly_rmd = float(header["poly_rmd"])/udens
+        return EOS_Poly(poly_rmd, poly_n)
+      elif eos_type == "pwpoly":
+        rmd_poly0 = float(header["poly_rmd"])/udens
+        ga_pieces = [v[1] for v in values]
+        rmd_bnd = [v[0]/udens for v in values[1:]]
+        return EOS_Piecewise_Poly(rmd_poly0, ga_pieces, rmd_bnd)
+      else:
+        raise IOError("Unkown eos_type: \"{}\"".format(eos_type))
+    except KeyError:
+      raise IOError("Could not parse \"{}\"".format(fname))

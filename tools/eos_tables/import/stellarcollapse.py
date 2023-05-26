@@ -69,7 +69,7 @@ table["dpdrho_epsye"]   =       table["dpdrhoe"]
 table["internalEnergy"] = 10.0**table["logenergy"]
 table["pressure"]       = 10.0**table["logpress"]
 table["temperature"]    = 10.0**table["logtemp"]
-table["version"]        = np.array(["1"])
+table["version"]        = np.array([1])
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
@@ -141,7 +141,7 @@ dfile.close()
 ofname = args.name + "_comp_" + tstamp + ".h5"
 dfile = h5py.File(ofname, "w")
 for var in tabentries.comp:
-    if table.has_key(var):
+    if var in table.keys():
         if table[var].dtype == np.float64:
             assert np.all(np.isfinite(table[var]))
         dfile.create_dataset(var, data=table[var])

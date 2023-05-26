@@ -50,7 +50,6 @@ def geomspace(x0,x1,n):
   return exp(linspace(log(x0), log(x1), n))
 #
 
-
 class EOS_Table(object):
   """Class representing a tabulated EOS
 
@@ -100,10 +99,10 @@ class EOS_Table(object):
     raise RuntimeError("ERROR".ljust(COLWIDTH)+msg)
   #
   def _protest(self, msg):
-      print("WARNING".ljust(COLWIDTH) + msg)
+      print(("WARNING".ljust(COLWIDTH) + msg))
   #
   def _info(self, msg):
-    print("INFO".ljust(COLWIDTH) + msg)
+    print(("INFO".ljust(COLWIDTH) + msg))
   #
   def _sed_adiabatic(self, rmd, p, sed0):
     """Compute specific energy from pressure and rest mass density, assuming constant entropy.
@@ -120,7 +119,7 @@ class EOS_Table(object):
   def _csnd_adiabatic(self, rmd, sed, p):
     """Compute soundspeed by numerical differentiation, assuming adiabatic EOS"""
     ed        = (1.0 + sed) * rmd
-    p_from_ed = cubic_spline(ed, p)
+    p_from_ed = cubic_spline(ed, p, self.order)
     cs2       = p_from_ed(ed, nu=1)
     if (any(cs2 < 0)):
       self._resist('Soundspeed computation failed: d(pressure)/d(energy density) < 0')
@@ -209,7 +208,8 @@ class EOS_Table(object):
     #
     csnd_new  = self._csnd_adiabatic(self.rmd, self.sed, self.p)
     return EOS_Table(self.rmd, self.sed, self.p, isentropic=True,
-                      csnd=csnd_new, efr=self.efr, temp=self.temp, mbar=self.mbar)
+                      csnd=csnd_new, efr=self.efr, temp=self.temp,
+                      mbar=self.mbar, order=self.order)
   #
   def make_adiabatic(self, remove_unphys_csnd=False):
     """Recompute specific energy and soundspeed assuming adiabaticity.
@@ -228,7 +228,7 @@ class EOS_Table(object):
     if remove_unphys_csnd:
       wrong   = csnd_new>1.0
       if any(wrong):
-        print "Warning: removing parts with superluminal soundspeed"
+        print("Warning: removing parts with superluminal soundspeed")
         sl    = slice(0,where(wrong)[0][0])
       #
     #
@@ -240,7 +240,7 @@ class EOS_Table(object):
     return EOS_Table(cut(self.rmd), cut(sed_new), cut(self.p),
                      isentropic=True, mbar=self.mbar,
                      csnd=cut(csnd_new), efr=cut(self.efr),
-                     temp=cut(self.temp))
+                     temp=cut(self.temp), order=self.order)
   #
   def natural_restmass_def(self, n_poly):
     """Find natural rest mass density definition
@@ -275,10 +275,11 @@ class EOS_Table(object):
     sed_new       = (1.0 / fconv - 1.0) + self.sed / fconv
 
     self._info("Correcting rest mass density")
-    print(" "*COLWIDTH + "rmd_new / rmd_old = %.14e" % fconv)
+    print((" "*COLWIDTH + "rmd_new / rmd_old = %.14e" % fconv))
 
     return EOS_Table(rmd_new, sed_new, self.p, isentropic=self.isentropic,
-                      csnd=self.csnd, efr=self.efr, temp=self.temp, mbar=mbar_new)
+                      csnd=self.csnd, efr=self.efr, temp=self.temp,
+                      mbar=mbar_new, order=self.order)
   #
   def make_restmass_natural(self, n_poly):
     """Returns EOS with natural restmass density definition.
@@ -290,7 +291,8 @@ class EOS_Table(object):
   def change_ndens_def(self, mbar_new):
     """Returns EOS with number density computed using particle mass mbar_new"""
     return EOS_Table(self.rmd, self.sed, self.p, isentropic=self.isentropic,
-                      csnd=self.csnd, efr=self.efr, temp=self.temp, mbar=mbar_new)
+                      csnd=self.csnd, efr=self.efr, temp=self.temp,
+                      mbar=mbar_new, order=self.order)
   #
   def make_poly_compatible(self, poly_n):
     """Adjust energy density to match polytrope at lowest density.
@@ -316,7 +318,7 @@ class EOS_Table(object):
     csnd_new = None
     if (self.has_csnd):
       if (self.isentropic):
-        csnd_new  = csnd_adiabatic(self.rmd, sed_new, self.p)
+        csnd_new  = self._csnd_adiabatic(self.rmd, sed_new, self.p)
         d = abs(csnd_new/self.csnd - 1).max()
         self._info("Recomputing soundspeed\n"
                    "  max(|cs_new/cs_old - 1|) = %.14e" % d)
@@ -325,7 +327,8 @@ class EOS_Table(object):
       #
     #
     return EOS_Table(self.rmd, sed_new, self.p, isentropic=self.isentropic,
-                      csnd=csnd_new, efr=self.efr, temp=self.temp, mbar=self.mbar)
+                      csnd=csnd_new, efr=self.efr, temp=self.temp,
+                      mbar=self.mbar, order=self.order)
   #
   def matching_polytrope(self):
     """Find matching polytrope at lowest tabulated density.
@@ -351,9 +354,11 @@ class EOS_Table(object):
     """Extend tabulated values to lower densities by using a matching polytrope."""
 
     poly      = self.matching_polytrope()
-    rmd_new   = geomspace(rmd_min, self.rmd_max, npoints)
+    rmd_new   = hstack((geomspace(rmd_min, self.rmd_min, npoints)[:-1],
+                       self.rmd))
 
-    return join_eos([poly,self],[self.rmd[0]], rmd_new, mbar=self.mbar)
+    return join_eos([poly,self],[self.rmd[0]], rmd_new, mbar=self.mbar,
+            order=self.order)
   #
   def remove_unphys_points(self):
     """Remove points for which p and/or sed are not increasing"""
@@ -389,7 +394,8 @@ class EOS_Table(object):
       temp_new = restrict(temp_new, mask)
 
     return EOS_Table(rmd_new, sed_new, p_new, isentropic=self.isentropic,
-        mbar=self.mbar, csnd=csnd_new, efr=efr_new, temp=temp_new)
+        mbar=self.mbar, csnd=csnd_new, efr=efr_new, temp=temp_new,
+        order=self.order)
   #
   @property
   def has_temp(self):
@@ -412,7 +418,7 @@ class EOS_Table(object):
     return (self.rmd[-1])
   #
   def __init__(self, rmd, sed, p, csnd=None, efr=None, temp=None, name='noname',
-    comment='', isentropic=False, mbar=None):
+    comment='', isentropic=False, mbar=None, order=3):
     """Construct EOS from tabulated values
 
     rmd:        Rest mass density
@@ -429,6 +435,7 @@ class EOS_Table(object):
     temp:       Temperature
     name:       Short name for EOS
     comment:    Description of EOS
+    order:      Spline order (default 3)
 
     The "hydrostatic potential" gm1 is always computed.
     It is defined up to a constant, we set gm1=hm1 at the lower end of
@@ -456,26 +463,27 @@ class EOS_Table(object):
     self.h              = 1.0 + self.hm1
     self.bnd            = self.rmd / self.mbar
     self.gm1            = self._compute_gm1(self.ted, self.p, self.hm1[0])
+    self.order          = order
 
     self._sanity_checks()
     self._oddity_checks()
 
-    self.p_from_rmd     = cubic_spline_loglog(self.rmd, self.p)
-    self.sed_from_rmd   = cubic_spline(self.rmd, self.sed)
-    self.hm1_from_rmd   = cubic_spline(self.rmd, self.hm1)
+    self.p_from_rmd     = cubic_spline_loglog(self.rmd, self.p, order)
+    self.sed_from_rmd   = cubic_spline(self.rmd, self.sed, order)
+    self.hm1_from_rmd   = cubic_spline(self.rmd, self.hm1, order)
     if is_strictly_increasing(self.hm1):
-      self.rmd_from_hm1 = cubic_spline(self.hm1, self.rmd)
+      self.rmd_from_hm1 = cubic_spline(self.hm1, self.rmd, order)
     else:
       self.rmd_from_hm1 = None
 
     if (self.efr is not None):
-      self.efr_from_rmd   = cubic_spline(self.rmd, self.efr)
+      self.efr_from_rmd   = cubic_spline(self.rmd, self.efr, order)
     #
     if (self.temp is not None):
-      self.temp_from_rmd  = cubic_spline(self.rmd, self.temp)
+      self.temp_from_rmd  = cubic_spline(self.rmd, self.temp, order)
     #
     if (self.csnd is not None):
-      self.csnd_from_rmd  = cubic_spline(self.rmd, self.csnd)
+      self.csnd_from_rmd  = cubic_spline(self.rmd, self.csnd, order)
     #
   #
   def save_pizza(self, path):
@@ -562,7 +570,7 @@ class EOS_Table(object):
     p_LU          = self.p * uc.pressure
     with open(path, 'w') as f:
       f.write("#\n#\n#\n#\n#\n%d\n#\n#\n#\n" % len(self.rmd))
-      for i,bnd,tmd,p in zip(range(len(self.rmd)), bnd_LU, tmd_LU, p_LU):
+      for i,bnd,tmd,p in zip(list(range(len(self.rmd))), bnd_LU, tmd_LU, p_LU):
         f.write("%d  %.15e  %.15e  %.15e \n" % (i, bnd, tmd, p))
       #
     #
@@ -588,6 +596,26 @@ class EOS_Table(object):
       #
     #
   #
+  def save_tovl(self, path):
+    """Save EOS in the TOVL format.
+    """
+    uc = self.units / CGS_UNITS
+
+    mbar_SI       = self.mbar * self.units.mass
+    cm_SI         = 1e-2
+    rmd_SI        = self.rmd * self.units.density
+    bnd_TU        = rmd_SI / mbar_SI * (cm_SI**3)
+    tmd_TU        = self.ted * uc.density
+    p_TU          = self.p * uc.pressure
+    nlines        = len(bnd_TU)
+    with open(path, "w") as f:
+      f.write("#\n#\n#\n")
+      f.write("%d <-- Number of lines\n#\n" % nlines)
+      f.write("#          nb [cm-3]       energy dens [g/cm3] pressure [erg/cm2]\n#\n")
+      for ix, nb, rho, p in zip(range(nlines), bnd_TU, tmd_TU, p_TU):
+        f.write("%d %.16e %.16e %.16e\n" % (ix, nb, rho, p))
+      #
+  #
   def __str__(self):
     """Textual representation for print etc"""
     fb      = {True:'yes', False:'no'}
@@ -609,7 +637,7 @@ class EOS_Table(object):
   #
 #
 
-def load_eos(path):
+def load_eos(path, order=3):
   """Load EOS_Table object from hdf5 file"""
   u = PIZZA_UNITS
   with h5.open_file(path, mode = 'r') as h5file:
@@ -626,11 +654,11 @@ def load_eos(path):
     efr         = (gtab.efr.read() if ('efr' in gtab) else None)
   #
   return EOS_Table(rmd, sed, p, isentropic=isentropic,
-                      csnd=csnd, efr=efr, temp=temp, name=name, comment=comment, mbar=mbar)
+                      csnd=csnd, efr=efr, temp=temp, name=name, comment=comment, mbar=mbar, order=order)
 #
 
 
-def load_eos_filga(path, umass, name='generic'):
+def load_eos_filga(path, umass, name='generic', order=3):
   """Load eos from table in Filippos' format
 
   Collumn 0: baryon number density [fm^-3]
@@ -663,10 +691,10 @@ def load_eos_filga(path, umass, name='generic'):
   #nd/fm^-3,p/cgs,sed/1,efr,csnd/c,temp/MeV
 
   return EOS_Table(rmd_GU, sed, P_GU, efr=efrac, csnd=csnd, temp=temp, name=name,
-                   comment='Loaded from '+path, mbar=mbar)
+                   comment='Loaded from '+path, mbar=mbar, order=order)
 #
 
-def load_eos_lorene(path, umass, name='generic'):
+def load_eos_lorene(path, umass, name='generic', order=3):
   """Load eos from table in Lorene format
 
   Collumn 0: baryon number density [fm^-3]
@@ -693,10 +721,10 @@ def load_eos_lorene(path, umass, name='generic'):
 
 
   return EOS_Table(rmd_GU, sed, P_GU, name=name,
-                   comment='Loaded from '+path, mbar=mbar)
+                   comment='Loaded from '+path, mbar=mbar, order=order)
 #
 
-def load_eos_lorene_std(path, umass, name='generic'):
+def load_eos_lorene_std(path, umass, name='generic', order=3):
   """Load eos from table in Lorene format
 
   Collumn 1: baryon number density [fm^-3]
@@ -723,10 +751,10 @@ def load_eos_lorene_std(path, umass, name='generic'):
 
 
   return EOS_Table(rmd_GU, sed, P_GU, name=name,
-                   comment='Loaded from '+path, mbar=mbar)
+                   comment='Loaded from '+path, mbar=mbar, order=order)
 #
 
-def sample_eos(eos, rmd_new, mbar=None):
+def sample_eos(eos, rmd_new, mbar=None, order=3):
   """Create tabulated EOS by sampling analytic EOS at densities rmd_new
 
   This only requires an object with functions p_from_rmd, sed_from_rmd,
@@ -743,10 +771,10 @@ def sample_eos(eos, rmd_new, mbar=None):
   temp_new  = getattr(eos, 'temp_from_rmd', niente)(rmd_new)
 
   return EOS_Table(rmd_new, sed_new, p_new, isentropic=eos.isentropic,
-                    csnd=csnd_new, efr=efr_new, temp=temp_new, mbar=mbar)
+                    csnd=csnd_new, efr=efr_new, temp=temp_new, mbar=mbar, order=order)
 #
 
-def join_eos(eoss, rmd_bnd, rmd_new, mbar=None):
+def join_eos(eoss, rmd_bnd, rmd_new, mbar=None, order=3):
   """Create EOS_Table by joining two or more analytic EOSs
 
   eoss      List of EOSs to join
@@ -784,6 +812,6 @@ def join_eos(eoss, rmd_bnd, rmd_new, mbar=None):
   isent_new = all([e.isentropic for e in eoss])
 
   return EOS_Table(rmd_new, sed_new, p_new, isentropic=isent_new,
-                    csnd=csnd_new, efr=efr_new, temp=temp_new, mbar=mbar)
+                    csnd=csnd_new, efr=efr_new, temp=temp_new, mbar=mbar, order=order)
 #
 

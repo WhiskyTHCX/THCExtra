@@ -62,7 +62,7 @@ class Units:
     self.angmom   = self.energy * self.time
     self.minertia = self.mass * self.area
   #
-  def __div__(self,base):
+  def __truediv__(self,base):
     """Express the unit system represented by this class in terms of the unit
     system base. This is only meaningful if both are expressed in SI units,
     or at least with respect to the same unit (although we recomment the convention

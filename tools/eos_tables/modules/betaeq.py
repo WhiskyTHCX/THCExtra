@@ -21,14 +21,28 @@ import numpy as np
 from scipy.interpolate import interp1d
 from scipy.optimize import minimize_scalar
 
-def interp_f_of_ye(ye, val):
+def myinterp1d(x, y, **kwargs):
     """
-    Interpolate some thermodynamical quantity as a function of ye
+    Custom 1d interpolator
+    """
+    return interp1d(x, y, kind='cubic', bounds_error=True, **kwargs)
 
-    * ye  : electron fraction
-    * val : thermodynamical variables to interpolate
+def find_temp_given_ent(temp1d, ye1d, ent2d, entropy):
     """
-    return interp1d(ye, val, kind='cubic', bounds_error=True)
+    Find the temperature such that S(T, Ye) = S0 for each ye
+
+    * temp1d  : 1d grid of temperatures
+    * ye1d    : 1d grid of Ye
+    * ent2d   : S[iye,itemp]
+    * entropy : wanted entropy
+    """
+    tout = np.zeros_like(ye1d)
+    for iye in range(ye1d.shape[0]):
+        f = myinterp1d(temp1d, (ent2d[iye,:] - entropy)**2)
+        res = minimize_scalar(f, bounds=(temp1d[0], temp1d[-1]), method='bounded',
+            options = {'xatol': 1e-2, 'maxiter': 100})
+        tout[iye] = res.x
+    return tout
 
 def find_beta_eq(ye, mu_e, mu_n, mu_p):
     """
@@ -52,7 +66,7 @@ def find_beta_eq(ye, mu_e, mu_n, mu_p):
     if np.all(mu_nu < 0):
         return ye[-1]
 
-    f = interp_f_of_ye(ye, mu_nu**2)
+    f = myinterp1d(ye, mu_nu**2)
     res = minimize_scalar(f, bounds=(ye[0], ye[-1]), method='bounded',
             options = {'xatol': 1e-6, 'maxiter': 100})
     return res.x

@@ -64,6 +64,8 @@ parser.add_argument("-p", "--pizza", dest="pizza", action="store_true",
     help="Output the EOS slice in PIZZA format")
 parser.add_argument("-r", "--rns", dest="rns", action="store_true",
     help="Output the EOS slice in RNS format")
+parser.add_argument("--tovl", dest="tovl", action="store_true",
+    help="Output the EOS slice in TOVL format")
 parser.add_argument("--rho-min", dest="rho_min", type=float,
     help="Minimum density reached in the coldslice")
 parser.add_argument("--rho-max", dest="rho_max", type=float,
@@ -293,4 +295,6 @@ if args.pizza:
     eos_slice.save_pizza("{}.pizza".format(args.output))
 if args.rns:
     eos_slice.save_rns("{}.rns".format(args.output))
+if args.tovl:
+    eos_slice.save_tovl("{}.dat".format(args.output))
 # -----------------------------------------------------------------------------
