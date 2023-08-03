@@ -65,6 +65,9 @@ void copy_file(char const * src, char const * dst)
 using namespace std;
 using namespace Pizza;
 using namespace LoreneID;
+// define namespace here for old versions of Lorene that don't do so
+namespace Lorene {}
+using namespace Lorene;
 
 /// Load binary neutron star initial data in LORENE format
 /** We just copy data provided by LORENE objects to the CACTUS grid,
