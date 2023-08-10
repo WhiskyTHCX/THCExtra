@@ -39,7 +39,7 @@ CCTK_INT FUNCTION NeutrinoAbsorptionRate( \
         CCTK_REAL OUT abs_1_nux)
 PROVIDES FUNCTION NeutrinoAbsorptionRate WITH NeutrinoAbsorptionRateImpl LANGUAGE Fortran
 
-# Normalized neutrino density and average energy
+# Normalized neutrino density and average energy at fixed Ye and temperature
 CCTK_INT FUNCTION NeutrinoDensity( \
         CCTK_REAL IN rho, \
         CCTK_REAL IN temp, \
@@ -51,6 +51,27 @@ CCTK_INT FUNCTION NeutrinoDensity( \
         CCTK_REAL OUT ene_nua, \
         CCTK_REAL OUT ene_nux)
 PROVIDES FUNCTION NeutrinoDensity WITH NeutrinoDensityImpl LANGUAGE Fortran
+
+# Weak equilibrium in optically thick conditions
+CCTK_INT FUNCTION WeakEquilibrium( \
+        CCTK_REAL IN rho, \
+        CCTK_REAL IN temp, \
+        CCTK_REAL IN ye, \
+        CCTK_REAL IN num_nue, \
+        CCTK_REAL IN num_nua, \
+        CCTK_REAL IN num_nux, \
+        CCTK_REAL IN ene_nue, \
+        CCTK_REAL IN ene_nua, \
+        CCTK_REAL IN ene_nux, \
+        CCTK_REAL OUT temp_eq, \
+        CCTK_REAL OUT ye_eq, \
+        CCTK_REAL OUT num_nue_eq, \
+        CCTK_REAL OUT num_nua_eq, \
+        CCTK_REAL OUT num_nux_eq, \
+        CCTK_REAL OUT ene_nue_eq, \
+        CCTK_REAL OUT ene_nua_eq, \
+        CCTK_REAL OUT ene_nux_eq)
+PROVIDES FUNCTION WeakEquilibrium WITH WeakEquilibriumImpl LANGUAGE Fortran
 
 CCTK_INT FUNCTION NucleiAbar( \
         CCTK_REAL IN rho,\

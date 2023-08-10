@@ -8,6 +8,16 @@ CCTK_STRING table_filename "Filename containing the table" STEERABLE=RECOVER
   ".+" :: "Filename"
 } "eos_table.h5"
 
+CCTK_REAL rho_min_cgs "Set all interaction coefficients to zero below this density" STEERABLE=RECOVER
+{
+  0:* :: "Any nonnegative number"
+} 0.0
+
+CCTK_REAL temp_min_mev "Set all interaction coefficients to zero below this temperature" STEERABLE=RECOVER
+{
+  0:* :: "Any nonnegative number"
+} 0.0
+
 boolean use_rho_max_ext "Zeroth order extension of the neutrino quantities"
 {
 } "yes"

@@ -3,16 +3,14 @@
 #include "cctk_Arguments.h"
 
 CCTK_REAL FUNCTION AtomicMassImpl()
-
     use table3d_mod
-    use weak_constants
+    use units
 
     implicit none
 
     DECLARE_CCTK_PARAMETERS
 
     !mass_fact is in MeV
-    AtomicMassImpl = normfact * cgs2cactusMass * mass_fact * mev_to_erg / (clite*clite)
-
+    AtomicMassImpl = normfact * cgs2cactusMass * mass_fact * mev_to_erg / (clight*clight)
 END FUNCTION AtomicMassImpl
 

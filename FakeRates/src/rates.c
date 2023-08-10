@@ -82,18 +82,18 @@ int NeutrinoDensityFake(
         CCTK_REAL * ene_nux) {
     DECLARE_CCTK_PARAMETERS
 
-    if(kappa_abs_nue > FLT_EPSILON*eta_nue) {
-        *num_nue = eta_nue/kappa_abs_nue;
-        *ene_nue = eta_nue/kappa_abs_nue;
+    if(rho*kappa_abs_nue > FLT_EPSILON*eta_nue) {
+        *num_nue = eta_nue/(rho*kappa_abs_nue);
+        *ene_nue = eta_nue/(rho*kappa_abs_nue);
     }
     else {
         *num_nue = 1.0;
         *ene_nue = 1.0;
     }
 
-    if(kappa_abs_nua > FLT_EPSILON*eta_nua) {
-        *num_nua = eta_nua/kappa_abs_nua;
-        *ene_nua = eta_nua/kappa_abs_nua;
+    if(rho*kappa_abs_nua > FLT_EPSILON*eta_nua) {
+        *num_nua = eta_nua/(rho*kappa_abs_nua);
+        *ene_nua = eta_nua/(rho*kappa_abs_nua);
     }
     else {
         *num_nua = 1.0;
@@ -104,6 +104,31 @@ int NeutrinoDensityFake(
     *ene_nux = 1.0;
 
     return 0;
+}
+
+int WeakEquilibriumFake(
+        CCTK_REAL const rho,
+        CCTK_REAL const temp,
+        CCTK_REAL const Y_e,
+        CCTK_REAL const num_nue,
+        CCTK_REAL const num_nua,
+        CCTK_REAL const num_nux,
+        CCTK_REAL const ene_nue,
+        CCTK_REAL const ene_nua,
+        CCTK_REAL const ene_nux,
+        CCTK_REAL * temp_eq,
+        CCTK_REAL * ye_eq,
+        CCTK_REAL * num_nue_eq,
+        CCTK_REAL * num_nua_eq,
+        CCTK_REAL * num_nux_eq,
+        CCTK_REAL * ene_nue_eq,
+        CCTK_REAL * ene_nua_eq,
+        CCTK_REAL * ene_nux_eq) {
+    *temp_eq = temp;
+    *ye_eq = Y_e;
+    return NeutrinoDensityFake(rho, *temp_eq, *ye_eq,
+            num_nue_eq, num_nua_eq, num_nux_eq,
+            ene_nue_eq, ene_nua_eq, ene_nux_eq);
 }
 
 int AverageAtomicMassFake(

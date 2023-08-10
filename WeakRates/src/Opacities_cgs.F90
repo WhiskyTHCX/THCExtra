@@ -22,7 +22,7 @@ INTEGER FUNCTION Opacities_cgs(rho, temp, ye, &
     use ieee_arithmetic
 #endif
     use table3d_mod
-    use weak_constants
+    use units
 
     IMPLICIT NONE
 
@@ -37,8 +37,6 @@ INTEGER FUNCTION Opacities_cgs(rho, temp, ye, &
 
     INTEGER :: Absorption_cgs, Scattering_cgs
     INTEGER :: err = 0
-
-    character(len=100) warnline
 
     Opacities_cgs = 0
 
@@ -126,7 +124,7 @@ INTEGER FUNCTION Absorption_cgs(rho, temp, ye,&
     use ieee_arithmetic
 #endif
     use table3d_mod
-    use weak_constants
+    use units
     use lk_interpolations
 
     IMPLICIT NONE
@@ -242,7 +240,7 @@ INTEGER FUNCTION Scattering_cgs(rho, temp, ye,&
     use ieee_arithmetic
 #endif
     use table3d_mod
-    use weak_constants
+    use units
     use lk_interpolations
 
     IMPLICIT NONE

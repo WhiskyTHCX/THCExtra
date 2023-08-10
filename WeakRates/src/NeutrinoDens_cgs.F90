@@ -11,7 +11,7 @@ INTEGER FUNCTION NeutrinoDens_cgs(rho, temp, ye,&
 #endif
     use table3d_mod
     use lk_interpolations
-    use weak_constants
+    use units
 
     implicit none
 
