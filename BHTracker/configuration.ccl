@@ -1,0 +1,7 @@
+# Configuration definitions for thorn BHTracker
+
+PROVIDES BHTracker
+{
+    SCRIPT
+    LANG
+}

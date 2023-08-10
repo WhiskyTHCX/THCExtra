@@ -1,0 +1,14 @@
+Cactus Code Thorn BHTracker
+Author(s)    : David Radice <dradice@astro.princeton.edu>
+Maintainer(s): David Radice <dradice@astro.princeton.edu>
+Licence      : GPLv3
+--------------------------------------------------------------------------
+
+1. Purpose
+
+Drive the CarpetRegrid2 AMR to track a single BH
+
+A. Acknowledgments
+
+Based on the PunctureTracker thorn by Michael Koppitz, Erik Schnetter, and
+Peter Diener. 

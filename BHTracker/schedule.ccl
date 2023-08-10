@@ -1,0 +1,37 @@
+# Schedule definitions for thorn BHTracker
+
+STORAGE: bh_time
+STORAGE: bh_position
+STORAGE: bh_position_old
+STORAGE: bh_velocity
+STORAGE: bh_num_levels
+
+SCHEDULE BHTracker_Startup AT CCTK_STARTUP
+{
+    LANG: C
+    OPTIONS: GLOBAL
+} "Register banner"
+
+SCHEDULE BHTracker_ParamCheck AT CCTK_PARAMCHECK
+{
+    LANG: C
+    OPTIONS: GLOBAL
+} "Check parameters"
+
+SCHEDULE BHTracker_Init AT CCTK_INITIAL
+{
+    LANG: C
+    OPTIONS: GLOBAL
+} "Initialize BH position"
+
+SCHEDULE BHTracker_TrackBH AT CCTK_EVOL AFTER MoL_Evolution
+{
+    LANG: C
+    OPTIONS: GLOBAL
+} "Calculate the new BH position and update AMR structure"
+
+SCHEDULE BHTracker_UpdateAMR AT PREREGRID
+{
+    LANG: C
+    OPTIONS: GLOBAL
+} "Steer the CarpetRegrid2 AMR parameters"
