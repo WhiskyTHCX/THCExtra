@@ -158,11 +158,13 @@ INTEGER FUNCTION Emissions_cgs(rho, temp, ye,&
     Qplasm_nux = Rgamma * Qgamma_Factor
 
     ! Bremsstrahlung fitting formula described in
-    ! A. Burrows et al. Nuclear Physics A 777 (2006) 356-394
-    Rbrem = 0.231d0 * (2.0778d2/mev_to_erg) * 0.5d0 * &
+    !   A. Burrows et al. Nuclear Physics A 777 (2006) 356-394
+    ! The factor 1/2 is to convert from emissivity of the pair to
+    ! emissivity for a single neutrino species
+    Qbrem = 0.5 * 1.04d2 * 0.5d0 * (1.0/mev_to_erg) * &
              (xn**2+ xp**2 + 28.0d0/3.0d0 * xn * xp) * &
-                    rho**2 * temp**(4.5d0)
-    Qbrem = Rbrem * temp / 0.231d0 * 0.504d0
+                    rho**2 * temp**(5.5d0)
+    Rbrem = 2.0 * Qbrem / (4.364d0 * temp)
 
     !Remeber the rates are in  MeV/ sec / cm^3
     R_nue = Rbeta_nue + Rpair_nue + Rplasm_nue + Rbrem
